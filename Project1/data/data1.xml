@@ -1,5 +1,4 @@
 <deliveryInfo>
-	<truck fuel="400" load="30"/>
 	<locations>
 		<location id="0" x="3" y="4" fuel="no"/>
 		<location id="1" x="1" y="2" fuel="yes"/>
@@ -17,6 +16,7 @@
 		<connection location1="3" location2="0" fuel="11"/>
 		<connection location1="4" location2="0" fuel="12"/>
 	</connections>
+	<truck fuel="400" load="30" startlocation="0"/>
 	<packages>
 		<package location="1" volume="5"  value="11"/>
 		<package location="3" volume="8"  value="21"/>
