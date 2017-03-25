@@ -14,8 +14,23 @@ import org.graphstream.graph.implementations.*;
 
 public class DeliveryInfo {
 	public static void main(String[] args) {
-		DeliveryInfo deliveryInfo = new DeliveryInfo();
-		deliveryInfo.displayGraph();
+		Scanner reader = new Scanner(System.in);
+		System.out.println("1 - Create file");
+		System.out.println("2 - Read file");
+		int decision = reader.nextInt();
+		
+		if (decision == 1) {
+			DeliveryInfo deliveryInfo = new DeliveryInfo();
+			deliveryInfo.createDocument();
+		}
+		else if (decision == 2){
+			System.out.print("Document name: ");
+			String file = reader.nextLine(); file = reader.nextLine();
+			DeliveryInfo deliveryInfo = new DeliveryInfo(file);
+			deliveryInfo.displayGraph();
+		}
+		
+		reader.close();
 	}
 	
 	/*=======================================================================================*/
@@ -89,18 +104,8 @@ public class DeliveryInfo {
 			Document doc = dBuilder.parse(inputFile);
 			doc.getDocumentElement().normalize();
 			
-			// Get truck info
-			NodeList nList = doc.getElementsByTagName("truck");
-			for (int i = 0; i < nList.getLength(); i++) {
-				org.w3c.dom.Element eElement = (org.w3c.dom.Element) nList.item(i);
-				int fuel = Integer.parseInt(eElement.getAttribute("fuel"));
-				int load = Integer.parseInt(eElement.getAttribute("load"));
-				
-				truck = new Truck(fuel, load);
-			}
-			
 			// Get locations
-			nList = doc.getElementsByTagName("location");
+			NodeList nList = doc.getElementsByTagName("location");
 			for (int i = 0; i < nList.getLength(); i++) {
 				org.w3c.dom.Element eElement = (org.w3c.dom.Element) nList.item(i);
 				int id = Integer.parseInt(eElement.getAttribute("id"));
@@ -127,7 +132,20 @@ public class DeliveryInfo {
 				l2.addConnection(l1, fuel);
 			}
 			
-			// Get deliveries
+			// Get truck info
+			nList = doc.getElementsByTagName("truck");
+			for (int i = 0; i < nList.getLength(); i++) {
+				org.w3c.dom.Element eElement = (org.w3c.dom.Element) nList.item(i);
+				int fuel = Integer.parseInt(eElement.getAttribute("fuel"));
+				int load = Integer.parseInt(eElement.getAttribute("load"));
+				int startlocation = Integer.parseInt(eElement.getAttribute("startlocation"));
+				
+				Location l1 = locations.get(startlocation);
+				
+				truck = new Truck(fuel, load, l1);
+			}
+			
+			// Get packages
 			nList = doc.getElementsByTagName("package");
 			for (int i = 0; i < nList.getLength(); i++) {
 				org.w3c.dom.Element eElement = (org.w3c.dom.Element) nList.item(i);
@@ -151,50 +169,104 @@ public class DeliveryInfo {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 			
+			//---------------------------------------------------------------------------
 			// root
 			Document doc = docBuilder.newDocument();
 			org.w3c.dom.Element rootElement = doc.createElement("deliveryInfo");
 			doc.appendChild(rootElement);
-			
-			// truck
-			org.w3c.dom.Element truck = doc.createElement("truck");
-			rootElement.appendChild(truck);
 			Scanner reader = new Scanner(System.in);
+			Random random = new Random();
 			
-			System.out.println("----Truck----");
-			System.out.println("Fuel: ");
-			int fuel = reader.nextInt();
-			System.out.println("Load: ");
-			int load = reader.nextInt();
-			
-			truck.setAttribute("fuel", Integer.toString(fuel));
-			truck.setAttribute("load", Integer.toString(load));		
-					
+			//---------------------------------------------------------------------------
 			// locations
 			org.w3c.dom.Element locations = doc.createElement("locations");
 			rootElement.appendChild(locations);
 			
 			System.out.println("----Locations----");
-			System.out.println("Number of locations: ");
+			System.out.print("Number of locations: ");
 			int nLocations = reader.nextInt();
+			System.out.print("Max X: ");
+			int maxX = reader.nextInt();
+			System.out.print("Max Y: ");
+			int maxY = reader.nextInt();
+			System.out.print("Aprox. nr. of fuel nodes (%): ");
+			int nFuel = reader.nextInt();
 			
+			for (int i = 0; i < nLocations; i++) {
+				org.w3c.dom.Element location = doc.createElement("location");
+				locations.appendChild(location);
+				location.setAttribute("id", ((Integer) i).toString());
+				location.setAttribute("x", ((Integer) random.nextInt(maxX)).toString());
+				location.setAttribute("y", ((Integer) random.nextInt(maxY)).toString());
+				
+				int isFuel = random.nextInt(99);
+				if (isFuel <= nFuel) {
+					location.setAttribute("fuel", "true");
+				}
+				else {
+					location.setAttribute("fuel", "false");	
+				}
+			}
 			
+			//---------------------------------------------------------------------------
 			// connections
 			org.w3c.dom.Element connections = doc.createElement("connections");
 			rootElement.appendChild(connections);
 			
 			System.out.println("----Connections----");
-			System.out.println("Number of connections: ");
+			System.out.print("Number of connections: ");
 			int nConnections = reader.nextInt();
+			System.out.print("Max. fuel per km: ");
+			int maxFuel = reader.nextInt();
 			
+			for (int i = 0; i < nConnections; i++) {
+				org.w3c.dom.Element connection = doc.createElement("connection");
+				connections.appendChild(connection);
+				connection.setAttribute("location1", ((Integer) random.nextInt(nLocations)).toString());
+				connection.setAttribute("location2", ((Integer) random.nextInt(nLocations)).toString());
+				connection.setAttribute("fuel", ((Integer) (random.nextInt(maxFuel)+1)).toString());
+			}
+			
+			//---------------------------------------------------------------------------
+			// truck
+			org.w3c.dom.Element truck = doc.createElement("truck");
+			rootElement.appendChild(truck);
+			
+			System.out.println("----Truck----");
+			System.out.print("Fuel: ");
+			int fuel = reader.nextInt();
+			System.out.print("Load: ");
+			int load = reader.nextInt();
+			System.out.print("Start node id: ");
+			int start = reader.nextInt();
+			
+			truck.setAttribute("fuel", Integer.toString(fuel));
+			truck.setAttribute("load", Integer.toString(load));
+			truck.setAttribute("startlocation", Integer.toString(start));
+			
+			//---------------------------------------------------------------------------
 			// packages
 			org.w3c.dom.Element packages = doc.createElement("packages");
 			rootElement.appendChild(packages);
 			
 			System.out.println("----Packages----");
-			System.out.println("Number of packages: ");
+			System.out.print("Number of packages: ");
 			int nPackages = reader.nextInt();
+			System.out.print("Max. volume: ");
+			int maxVolume = reader.nextInt();
+			System.out.print("Max. value: ");
+			int maxValue = reader.nextInt();
 			
+			for (int i = 0; i < nPackages; i++) {
+				org.w3c.dom.Element dPackage = doc.createElement("package");
+				packages.appendChild(dPackage);
+				dPackage.setAttribute("location", ((Integer) random.nextInt(nLocations)).toString());
+				dPackage.setAttribute("volume", ((Integer) (random.nextInt(maxVolume)+1)).toString());
+				dPackage.setAttribute("value", ((Integer) (random.nextInt(maxValue)+1)).toString());
+			}
+			
+			
+			//---------------------------------------------------------------------------
 			// write to xml file
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
@@ -230,7 +302,7 @@ public class DeliveryInfo {
 		}
 		
 		// Create edges
-		for (Integer key: locations.keySet()) {			
+		for (Integer key: locations.keySet()) {
 			for (Location location: locations.get(key).getConnections().keySet()) {
 				String node1 = ((Integer) locations.get(key).getID()).toString();
 				String node2 = ((Integer) location.getID()).toString();
