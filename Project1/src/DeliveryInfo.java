@@ -89,13 +89,13 @@ public class DeliveryInfo {
 				Element eElement = (Element) nList.item(i);
 				int location1 = Integer.parseInt(eElement.getAttribute("location1"));
 				int location2 = Integer.parseInt(eElement.getAttribute("location2"));
-				int distance = Integer.parseInt(eElement.getAttribute("distance"));
+				int fuel = Integer.parseInt(eElement.getAttribute("fuel"));
 				
 				Location l1 = locations.get(location1);
 				Location l2 = locations.get(location2);
 				
-				l1.addConnection(l2, distance);
-				l2.addConnection(l1, distance);
+				l1.addConnection(l2, fuel);
+				l2.addConnection(l1, fuel);
 			}
 			
 			// Get deliveries

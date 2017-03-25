@@ -38,8 +38,8 @@ public class Location {
 		return fuel;
 	}
 	
-	public void addConnection(Location location, int distance) {
-		connections.put(location, distance);
+	public void addConnection(Location location, int fuel) {
+		connections.put(location, fuel);
 	}
 	
 }

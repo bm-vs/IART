@@ -9,13 +9,13 @@
 		<location id="5" x="1" y="1" fuel="yes"/>
 	</locations>
 	<connections>
-		<connection location1="1" location2="3" distance="100"/>
-		<connection location1="1" location2="5" distance="80"/>
-		<connection location1="5" location2="2" distance="120"/>
-		<connection location1="2" location2="3" distance="70"/>
-		<connection location1="2" location2="4" distance="100"/>
-		<connection location1="3" location2="0" distance="110"/>
-		<connection location1="4" location2="0" distance="120"/>
+		<connection location1="1" location2="3" fuel="10"/>
+		<connection location1="1" location2="5" fuel="8"/>
+		<connection location1="5" location2="2" fuel="12"/>
+		<connection location1="2" location2="3" fuel="7"/>
+		<connection location1="2" location2="4" fuel="10"/>
+		<connection location1="3" location2="0" fuel="11"/>
+		<connection location1="4" location2="0" fuel="12"/>
 	</connections>
 	<packages>
 		<package location="1" volume="5"  value="11"/>
