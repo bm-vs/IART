@@ -22,6 +22,9 @@ public class Location {
 		}
 	}
 	
+	/*=======================================================================================*/
+	/* Gets */
+	
 	public int getID() {
 		return id;
 	}
@@ -37,6 +40,13 @@ public class Location {
 	public boolean getFuel() {
 		return fuel;
 	}
+	
+	public HashMap<Location, Integer> getConnections() {
+		return connections;
+	}
+	
+	/*=======================================================================================*/
+	/* Edit */
 	
 	public void addConnection(Location location, int fuel) {
 		connections.put(location, fuel);

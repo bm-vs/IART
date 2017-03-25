@@ -1,4 +1,3 @@
-import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
@@ -6,7 +5,22 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.util.*;
 
+// XML parser
+import org.w3c.dom.*;
+
+// Graph display
+import org.graphstream.graph.*;
+import org.graphstream.graph.implementations.*;
+
 public class DeliveryInfo {
+	public static void main(String[] args) {
+		DeliveryInfo deliveryInfo = new DeliveryInfo();
+		deliveryInfo.displayGraph();
+	}
+	
+	/*=======================================================================================*/
+	/* Paramenters and constructors */
+	
 	private Truck truck;
 	private HashMap<Integer, Location> locations;
 	private ArrayList<Package> packages;
@@ -14,8 +28,17 @@ public class DeliveryInfo {
 	public DeliveryInfo() {
 		locations = new HashMap<Integer,Location>();
 		packages = new ArrayList<Package>();
-		parseDocument();
+		parseDocument("data1");
 	}
+	
+	public DeliveryInfo(String docName) {
+		locations = new HashMap<Integer,Location>();
+		packages = new ArrayList<Package>();
+		parseDocument(docName);
+	}
+	
+	/*=======================================================================================*/
+	/* Gets */
 	
 	public Truck getTruck() {
 		return truck;
@@ -28,6 +51,9 @@ public class DeliveryInfo {
 	public ArrayList<Package> getDeliveries() {
 		return packages;
 	}
+	
+	/*=======================================================================================*/
+	/* Print data */
 	
 	public void printTruck() {
 		System.out.println("----Truck----");
@@ -48,9 +74,12 @@ public class DeliveryInfo {
 		}
 	}
 	
-	public void parseDocument() {
+	/*=======================================================================================*/
+	/* XML data documents */
+	
+	public void parseDocument(String docName) {
 		try {
-			File inputFile = new File("data/data1.xml");
+			File inputFile = new File("data/" + docName + ".xml");
 			
 			// Create a DocumentBuilder
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -63,7 +92,7 @@ public class DeliveryInfo {
 			// Get truck info
 			NodeList nList = doc.getElementsByTagName("truck");
 			for (int i = 0; i < nList.getLength(); i++) {
-				Element eElement = (Element) nList.item(i);
+				org.w3c.dom.Element eElement = (org.w3c.dom.Element) nList.item(i);
 				int fuel = Integer.parseInt(eElement.getAttribute("fuel"));
 				int load = Integer.parseInt(eElement.getAttribute("load"));
 				
@@ -73,7 +102,7 @@ public class DeliveryInfo {
 			// Get locations
 			nList = doc.getElementsByTagName("location");
 			for (int i = 0; i < nList.getLength(); i++) {
-				Element eElement = (Element) nList.item(i);
+				org.w3c.dom.Element eElement = (org.w3c.dom.Element) nList.item(i);
 				int id = Integer.parseInt(eElement.getAttribute("id"));
 				int x = Integer.parseInt(eElement.getAttribute("x"));
 				int y = Integer.parseInt(eElement.getAttribute("y"));
@@ -86,7 +115,7 @@ public class DeliveryInfo {
 			// Get connections
 			nList = doc.getElementsByTagName("connection");
 			for (int i = 0; i < nList.getLength(); i++) {
-				Element eElement = (Element) nList.item(i);
+				org.w3c.dom.Element eElement = (org.w3c.dom.Element) nList.item(i);
 				int location1 = Integer.parseInt(eElement.getAttribute("location1"));
 				int location2 = Integer.parseInt(eElement.getAttribute("location2"));
 				int fuel = Integer.parseInt(eElement.getAttribute("fuel"));
@@ -101,7 +130,7 @@ public class DeliveryInfo {
 			// Get deliveries
 			nList = doc.getElementsByTagName("package");
 			for (int i = 0; i < nList.getLength(); i++) {
-				Element eElement = (Element) nList.item(i);
+				org.w3c.dom.Element eElement = (org.w3c.dom.Element) nList.item(i);
 				int locationID = Integer.parseInt(eElement.getAttribute("location"));
 				int volume = Integer.parseInt(eElement.getAttribute("volume"));
 				int value = Integer.parseInt(eElement.getAttribute("value"));
@@ -124,11 +153,11 @@ public class DeliveryInfo {
 			
 			// root
 			Document doc = docBuilder.newDocument();
-			Element rootElement = doc.createElement("deliveryInfo");
+			org.w3c.dom.Element rootElement = doc.createElement("deliveryInfo");
 			doc.appendChild(rootElement);
 			
 			// truck
-			Element truck = doc.createElement("truck");
+			org.w3c.dom.Element truck = doc.createElement("truck");
 			rootElement.appendChild(truck);
 			Scanner reader = new Scanner(System.in);
 			
@@ -142,7 +171,7 @@ public class DeliveryInfo {
 			truck.setAttribute("load", Integer.toString(load));		
 					
 			// locations
-			Element locations = doc.createElement("locations");
+			org.w3c.dom.Element locations = doc.createElement("locations");
 			rootElement.appendChild(locations);
 			
 			System.out.println("----Locations----");
@@ -151,7 +180,7 @@ public class DeliveryInfo {
 			
 			
 			// connections
-			Element connections = doc.createElement("connections");
+			org.w3c.dom.Element connections = doc.createElement("connections");
 			rootElement.appendChild(connections);
 			
 			System.out.println("----Connections----");
@@ -159,7 +188,7 @@ public class DeliveryInfo {
 			int nConnections = reader.nextInt();
 			
 			// packages
-			Element packages = doc.createElement("packages");
+			org.w3c.dom.Element packages = doc.createElement("packages");
 			rootElement.appendChild(packages);
 			
 			System.out.println("----Packages----");
@@ -173,7 +202,8 @@ public class DeliveryInfo {
 			DOMSource source = new DOMSource(doc);
 			StreamResult result = new StreamResult(new File("data/" + System.currentTimeMillis() + ".xml"));
 			
-			transformer.transform(source, result);	
+			transformer.transform(source, result);
+			reader.close();
 		}
 		catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
@@ -181,5 +211,38 @@ public class DeliveryInfo {
 		catch (TransformerException tfe) {
 			tfe.printStackTrace();
 		}
+	}
+
+	/*=======================================================================================*/
+	/* Graph display */
+
+	public void displayGraph() {
+		Graph graph = new SingleGraph("Delivery Info");
+		
+		// Create nodes
+		for (Integer key: locations.keySet()) {
+			graph.addNode(key.toString());
+			org.graphstream.graph.Node n = graph.getNode(key.toString());
+			n.setAttribute("x", locations.get(key).getX());
+			n.setAttribute("y", locations.get(key).getY());
+			n.addAttribute("ui.label", key.toString());
+			n.addAttribute("layout.frozen");
+		}
+		
+		// Create edges
+		for (Integer key: locations.keySet()) {			
+			for (Location location: locations.get(key).getConnections().keySet()) {
+				String node1 = ((Integer) locations.get(key).getID()).toString();
+				String node2 = ((Integer) location.getID()).toString();
+				
+				Edge e1 = graph.getEdge(node1+node2);
+				Edge e2 = graph.getEdge(node2+node1);
+				if (e1 == null && e2 == null) {
+					graph.addEdge(node1+node2, node1, node2);
+				}
+			}
+		}
+		
+		graph.display();
 	}
 }
