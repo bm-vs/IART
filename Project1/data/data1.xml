@@ -1,0 +1,26 @@
+<deliveryInfo>
+	<truck fuel="400" load="30"/>
+	<locations>
+		<location id="0" x="3" y="4" fuel="no"/>
+		<location id="1" x="1" y="2" fuel="yes"/>
+		<location id="2" x="3" y="1" fuel="no"/>
+		<location id="3" x="2" y="3" fuel="no"/>
+		<location id="4" x="4" y="2" fuel="no"/>
+		<location id="5" x="1" y="1" fuel="yes"/>
+	</locations>
+	<connections>
+		<connection location1="1" location2="3" distance="100"/>
+		<connection location1="1" location2="5" distance="80"/>
+		<connection location1="5" location2="2" distance="120"/>
+		<connection location1="2" location2="3" distance="70"/>
+		<connection location1="2" location2="4" distance="100"/>
+		<connection location1="3" location2="0" distance="110"/>
+		<connection location1="4" location2="0" distance="120"/>
+	</connections>
+	<packages>
+		<package location="1" volume="5"  value="11"/>
+		<package location="3" volume="8"  value="21"/>
+		<package location="4" volume="12" value="31"/>
+		<package location="0" volume="3"  value="10"/>
+	</packages>
+</deliveryInfo>
