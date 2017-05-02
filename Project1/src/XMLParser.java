@@ -15,15 +15,10 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-public class XMLParser {
-	private DeliveryInfo info;
+public class XMLParser {	
+	public XMLParser() {}
 	
-	public XMLParser(DeliveryInfo info) {
-		this.info = info;
-	}
-	
-	
-	public void read(String docName) {
+	public void read(String docName, DeliveryInfo info) {
 		try {
 			File inputFile = new File("data/" + docName + ".xml");
 			
@@ -94,7 +89,7 @@ public class XMLParser {
 		}
 	}
 
-	public void write() {
+	public void write(int nLocations, int maxX, int maxY, int nFuel, int nConnections, int maxFuel, int fuel, int load, int start, int nPackages, int maxVolume, int maxValue) {
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -111,16 +106,6 @@ public class XMLParser {
 			// locations
 			org.w3c.dom.Element locations = doc.createElement("locations");
 			rootElement.appendChild(locations);
-			
-			System.out.println("----Locations----");
-			System.out.print("Number of locations: ");
-			int nLocations = reader.nextInt();
-			System.out.print("Max X: ");
-			int maxX = reader.nextInt();
-			System.out.print("Max Y: ");
-			int maxY = reader.nextInt();
-			System.out.print("Aprox. nr. of fuel nodes (%): ");
-			int nFuel = reader.nextInt();
 			
 			for (int i = 0; i < nLocations; i++) {
 				org.w3c.dom.Element location = doc.createElement("location");
@@ -143,12 +128,6 @@ public class XMLParser {
 			org.w3c.dom.Element connections = doc.createElement("connections");
 			rootElement.appendChild(connections);
 			
-			System.out.println("----Connections----");
-			System.out.print("Number of connections: ");
-			int nConnections = reader.nextInt();
-			System.out.print("Max. fuel per km: ");
-			int maxFuel = reader.nextInt();
-			
 			for (int i = 0; i < nConnections; i++) {
 				org.w3c.dom.Element connection = doc.createElement("connection");
 				connections.appendChild(connection);
@@ -162,14 +141,6 @@ public class XMLParser {
 			org.w3c.dom.Element truck = doc.createElement("truck");
 			rootElement.appendChild(truck);
 			
-			System.out.println("----Truck----");
-			System.out.print("Fuel: ");
-			int fuel = reader.nextInt();
-			System.out.print("Load: ");
-			int load = reader.nextInt();
-			System.out.print("Start node id: ");
-			int start = reader.nextInt();
-			
 			truck.setAttribute("fuel", Integer.toString(fuel));
 			truck.setAttribute("load", Integer.toString(load));
 			truck.setAttribute("startlocation", Integer.toString(start));
@@ -179,14 +150,6 @@ public class XMLParser {
 			org.w3c.dom.Element packages = doc.createElement("packages");
 			rootElement.appendChild(packages);
 			
-			System.out.println("----Packages----");
-			System.out.print("Number of packages: ");
-			int nPackages = reader.nextInt();
-			System.out.print("Max. volume: ");
-			int maxVolume = reader.nextInt();
-			System.out.print("Max. value: ");
-			int maxValue = reader.nextInt();
-			
 			for (int i = 0; i < nPackages; i++) {
 				org.w3c.dom.Element dPackage = doc.createElement("package");
 				packages.appendChild(dPackage);
@@ -194,8 +157,7 @@ public class XMLParser {
 				dPackage.setAttribute("volume", ((Integer) (random.nextInt(maxVolume)+1)).toString());
 				dPackage.setAttribute("value", ((Integer) (random.nextInt(maxValue)+1)).toString());
 			}
-			
-			
+				
 			//---------------------------------------------------------------------------
 			// write to xml file
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();

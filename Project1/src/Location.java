@@ -5,7 +5,7 @@ public class Location {
 	private int x;
 	private int y;
 	private boolean fuel;
-	private HashMap<Location, Integer> connections;
+	private HashMap<Location, Integer> connections; //Connected nodes and respective fuel consumption per distance unit
 
 	public Location(int id, int x, int y, boolean fuel) {
 		this.id = id;

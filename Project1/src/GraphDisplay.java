@@ -2,16 +2,14 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 
-public class GUI {
-	private DeliveryInfo info;
+public class GraphDisplay {
+	private Graph graph;
 	
-	public GUI(DeliveryInfo info) {
-		this.info = info;
+	public GraphDisplay() {
+		graph = new SingleGraph("Delivery Info");
 	}
 	
-	public void display() {
-		Graph graph = new SingleGraph("Delivery Info");
-		
+	public void display(DeliveryInfo info) {
 		// Create nodes
 		for (Integer key: info.getLocations().keySet()) {
 			graph.addNode(key.toString());

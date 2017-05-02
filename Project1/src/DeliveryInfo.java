@@ -1,37 +1,16 @@
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.*;
 import java.util.*;
-
-// XML parser
-import org.w3c.dom.*;
-
-// Graph display
-import org.graphstream.graph.*;
-import org.graphstream.graph.implementations.*;
 
 public class DeliveryInfo {
 	/*=======================================================================================*/
 	/* Paramenters and constructors */
 	
 	private Truck truck;
-	private HashMap<Integer, Location> locations;
+	private HashMap<Integer, Location> locations; // List of nodes
 	private ArrayList<Package> packages;
 	
 	public DeliveryInfo() {
 		locations = new HashMap<Integer,Location>();
 		packages = new ArrayList<Package>();
-		XMLParser parser = new XMLParser(this);
-		parser.read("data1");
-	}
-	
-	public DeliveryInfo(String docName) {
-		locations = new HashMap<Integer,Location>();
-		packages = new ArrayList<Package>();
-		XMLParser parser = new XMLParser(this);
-		parser.read(docName);
 	}
 	
 	/*=======================================================================================*/
