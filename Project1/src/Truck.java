@@ -1,4 +1,5 @@
 public class Truck {
+
 	private int fuel;
 	private int load;
 	private Location location;
@@ -14,4 +15,15 @@ public class Truck {
 		location.print();
 	}
 	
+	public int getFuel() {
+		return fuel;
+	}
+
+	public int getLoad() {
+		return load;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
 }

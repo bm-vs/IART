@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -14,6 +15,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 public class XMLParser {	
 	public XMLParser() {}
@@ -103,28 +106,43 @@ public class XMLParser {
 			Random random = new Random();
 			
 			//---------------------------------------------------------------------------
-			// locations
+			// Locations
 			org.w3c.dom.Element locations = doc.createElement("locations");
 			rootElement.appendChild(locations);
+			ArrayList<Location> nodes = new ArrayList<Location>();
 			
+			//Create Locations
 			for (int i = 0; i < nLocations; i++) {
-				org.w3c.dom.Element location = doc.createElement("location");
-				locations.appendChild(location);
-				location.setAttribute("id", ((Integer) i).toString());
-				location.setAttribute("x", ((Integer) random.nextInt(maxX)).toString());
-				location.setAttribute("y", ((Integer) random.nextInt(maxY)).toString());
+				Integer id = i;
+				Integer x = (Integer) random.nextInt(maxX);
+				Integer y = (Integer) random.nextInt(maxY);
+				Location node = new Location(id,x,y,false);
 				
-				int isFuel = random.nextInt(99);
-				if (isFuel <= nFuel) {
-					location.setAttribute("fuel", "true");
-				}
-				else {
-					location.setAttribute("fuel", "false");	
+				nodes.add(node);
+			}
+			//Generate fuel locations correctly
+			int nrFuelNodes = 0;
+			while(nrFuelNodes < nFuel*nodes.size()/100){
+				int nodeindex = random.nextInt(nodes.size());
+				if(!nodes.get(nodeindex).getFuel()){
+					nodes.get(nodeindex).setFuel(true);
+					nrFuelNodes++;
 				}
 			}
+			//Insert locations in document
+			for(Location node : nodes){
+				org.w3c.dom.Element location = doc.createElement("location");
+				locations.appendChild(location);
+				location.setAttribute("id", ((Integer)node.getID()).toString());
+				location.setAttribute("x", ((Integer)node.getX()).toString());
+				location.setAttribute("y", ((Integer)node.getY()).toString());
+				location.setAttribute("fuel", ((Boolean)node.getFuel()).toString());
+			}
+			
+			
 			
 			//---------------------------------------------------------------------------
-			// connections
+			// Connections
 			org.w3c.dom.Element connections = doc.createElement("connections");
 			rootElement.appendChild(connections);
 			
@@ -137,7 +155,7 @@ public class XMLParser {
 			}
 			
 			//---------------------------------------------------------------------------
-			// truck
+			// Truck
 			org.w3c.dom.Element truck = doc.createElement("truck");
 			rootElement.appendChild(truck);
 			
@@ -146,7 +164,7 @@ public class XMLParser {
 			truck.setAttribute("startlocation", Integer.toString(start));
 			
 			//---------------------------------------------------------------------------
-			// packages
+			// Packages
 			org.w3c.dom.Element packages = doc.createElement("packages");
 			rootElement.appendChild(packages);
 			
@@ -159,7 +177,7 @@ public class XMLParser {
 			}
 				
 			//---------------------------------------------------------------------------
-			// write to xml file
+			// Write to xml file
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");

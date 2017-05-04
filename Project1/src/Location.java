@@ -41,6 +41,10 @@ public class Location {
 		return fuel;
 	}
 	
+	public void setFuel(boolean fuel) {
+		this.fuel = fuel;
+	}
+
 	public HashMap<Location, Integer> getConnections() {
 		return connections;
 	}

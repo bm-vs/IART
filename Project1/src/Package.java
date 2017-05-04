@@ -1,4 +1,5 @@
 public class Package {
+
 	private Location location;
 	private int volume;
 	private int value;
@@ -12,4 +13,17 @@ public class Package {
 	public void print() {
 		System.out.println(location.getID() + " " + volume + " " + value);
 	}
+	
+	public Location getLocation() {
+		return location;
+	}
+
+	public int getVolume() {
+		return volume;
+	}
+
+	public int getValue() {
+		return value;
+	}
+
 }
