@@ -118,4 +118,8 @@ public class Location implements Comparable<Location> {
 	public int compareTo(Location l) {		
 		return Double.compare(f, l.getF());
 	}
+	
+	public String toString() {
+		return ((Integer) id).toString();
+	}
 }

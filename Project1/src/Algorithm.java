@@ -20,7 +20,7 @@ public class Algorithm {
 			
 			aStar(startLocation, deliveryInfo.getLocation(5), closed);
 			
-			System.out.println(closed.size());
+			System.out.println(closed);
 		}
 	}
 	
@@ -38,13 +38,15 @@ public class Algorithm {
 			
 			for (Location successor: q.getConnections().keySet()) {
 				if (successor.equals(goal)) {
+					closed.add(q);
+					closed.add(successor);
 					gui.setEdgeVisited(successor, q);
 					gui.setNodeVisited(successor);
 					return q.getG() + successor.distance(q);
 				}
 				
 				double g = q.getG() + successor.distance(q);
-				double h = successor.distance(goal);
+				double h = heuristic(successor, goal);
 				double f = g + h;
 				
 				if (inContainer(successor, open)) {
@@ -71,6 +73,10 @@ public class Algorithm {
 		}
 		
 		return Integer.MAX_VALUE;
+	}
+	
+	public double heuristic(Location l, Location goal) {
+		return l.distance(goal);
 	}
 	
 	public boolean inContainer(Location successor, AbstractCollection<Location> container) {
