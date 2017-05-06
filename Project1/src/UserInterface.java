@@ -53,10 +53,9 @@ public class UserInterface {
 				DeliveryInfo deliveryInfo = new DeliveryInfo();
 				XMLParser parser = new XMLParser();
 				parser.read(file, deliveryInfo);
-				GraphDisplay gui = new GraphDisplay();
-				
-				
+				GraphDisplay gui = new GraphDisplay(deliveryInfo);				
 				Algorithm alg = new Algorithm(deliveryInfo, gui);
+				alg.run("max_deliveries");
 			}
 		} while (decision != 3);
 		

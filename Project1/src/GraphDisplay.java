@@ -5,11 +5,15 @@ import org.graphstream.graph.implementations.SingleGraph;
 public class GraphDisplay {
 	private Graph graph;
 	
-	public GraphDisplay() {
+	public GraphDisplay(DeliveryInfo info) {
 		graph = new SingleGraph("Delivery Info");
-	}
-	
-	public void display(DeliveryInfo info) {
+		/*==================================*/
+		/* Remove for better performance */
+		graph.addAttribute("ui.antialias");
+		graph.addAttribute("ui.quality");
+		/*==================================*/
+		graph.addAttribute("ui.stylesheet", "url('file:///../style/style.css')");
+		
 		// Create nodes
 		for (Integer key: info.getLocations().keySet()) {
 			graph.addNode(key.toString());
@@ -33,7 +37,28 @@ public class GraphDisplay {
 				}
 			}
 		}
-		
+	}
+	
+	public void setNodeVisited(Location location) {
+		org.graphstream.graph.Node n = graph.getNode(location.getID());
+		if (n != null) {
+			n.addAttribute("ui.class", "visited");
+		}
+	}
+	
+	public void setEdgeVisited(Location location, Location nextLocation) {
+		Edge e1 = graph.getEdge(((Integer) location.getID()).toString() + ((Integer) nextLocation.getID()).toString());
+		Edge e2 = graph.getEdge(((Integer) nextLocation.getID()).toString() + ((Integer) location.getID()).toString());		
+
+		if (e1 != null) {
+			e1.addAttribute("ui.class", "visited");
+		}
+		else if (e2 != null) {
+			e2.addAttribute("ui.class", "visited");
+		}
+	}
+	
+	public void display() {
 		graph.display();
 	}
 }

@@ -1,6 +1,9 @@
-/Main.class
-/XMLParser.class
-/GUI.class
-/GraphDisplay.class
-/UserInterface.class
 /Algorithm.class
+/DeliveryInfo.class
+/GraphDisplay.class
+/Location.class
+/Main.class
+/Package.class
+/Truck.class
+/UserInterface.class
+/XMLParser.class

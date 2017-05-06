@@ -1,0 +1,16 @@
+node {
+	fill-color: black;
+	size: 10px;
+	stroke-mode: plain;
+	stroke-color: black;
+	stroke-width: 1px;
+}
+
+node.visited {
+	fill-color: yellow;
+}
+
+edge.visited {
+	fill-color: yellow;
+}
+
