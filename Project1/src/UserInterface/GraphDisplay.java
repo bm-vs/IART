@@ -1,11 +1,17 @@
+package UserInterface;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 
+import ProblemData.DeliveryInfo;
+import ProblemData.Location;
+
 public class GraphDisplay {
 	private Graph graph;
 	
-	public GraphDisplay(DeliveryInfo info) {
+	public GraphDisplay() {
+		DeliveryInfo info = UserInterface.deliveryInfo;
+		
 		graph = new SingleGraph("Delivery Info");
 		/*==================================*/
 		/* Remove for better performance */

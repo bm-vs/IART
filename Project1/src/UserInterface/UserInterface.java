@@ -1,6 +1,14 @@
+package UserInterface;
 import java.util.Scanner;
 
+import ProblemData.Algorithm;
+import ProblemData.DeliveryInfo;
+import ProblemData.XMLParser;
+
 public class UserInterface {
+	public static DeliveryInfo deliveryInfo;
+	public static GraphDisplay gui;
+	
 	public UserInterface() {
 		Scanner reader = new Scanner(System.in);
 		int decision;
@@ -50,11 +58,11 @@ public class UserInterface {
 			else if (decision == 2){
 				System.out.print("Document name: ");
 				String file = reader.nextLine(); file = reader.nextLine();
-				DeliveryInfo deliveryInfo = new DeliveryInfo();
+				deliveryInfo = new DeliveryInfo();
 				XMLParser parser = new XMLParser();
 				parser.read(file, deliveryInfo);
-				GraphDisplay gui = new GraphDisplay(deliveryInfo);				
-				Algorithm alg = new Algorithm(deliveryInfo, gui);
+				gui = new GraphDisplay();				
+				Algorithm alg = new Algorithm();
 				alg.run("max_deliveries");
 			}
 		} while (decision != 3);

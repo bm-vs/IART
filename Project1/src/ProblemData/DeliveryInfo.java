@@ -1,3 +1,4 @@
+package ProblemData;
 import java.util.*;
 
 public class DeliveryInfo {
@@ -45,6 +46,14 @@ public class DeliveryInfo {
 	
 	public void addPackage(Package delivery) {
 		packages.add(delivery);
+	}
+	
+	/*=======================================================================================*/
+	/* Util */
+	public void resetAStarVars() {
+		for (Integer id: locations.keySet()) {
+			locations.get(id).setAStarVars(0, 0, 0, null);
+		}
 	}
 	
 	/*=======================================================================================*/

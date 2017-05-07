@@ -1,3 +1,4 @@
+package ProblemData;
 import java.util.HashMap;
 
 public class Location implements Comparable<Location> {
@@ -97,7 +98,7 @@ public class Location implements Comparable<Location> {
 		this.parent = parent;
 	}
 	
-	public void setAlgVars(double g, double f, double h, Location parent) {
+	public void setAStarVars(double g, double f, double h, Location parent) {
 		this.g = g;
 		this.f = f;
 		this.h = h;
