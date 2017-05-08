@@ -1,12 +1,12 @@
 package ProblemData;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Location implements Comparable<Location> {
 	private int id;
 	private int x;
 	private int y;
 	private boolean fuel;
-	private HashMap<Location, Integer> connections; //Connected nodes and respective fuel consumption per distance unit
+	private ArrayList<Connection> connections; //Connected nodes and respective fuel consumption per distance unit
 	private double g;
 	private double f;
 	private double h;
@@ -17,13 +17,13 @@ public class Location implements Comparable<Location> {
 		this.x = x;
 		this.y = y;
 		this.fuel = fuel;
-		connections = new HashMap<Location, Integer>();
+		connections = new ArrayList<Connection>();
 	}
 	
 	public void print() {
 		System.out.println(id + " " + x + " " + y + " " + fuel);
-		for (Location key: connections.keySet()) {
-			System.out.println("   " + key.getID() + " " + connections.get(key));
+		for (Connection c: connections) {
+			System.out.println(c);
 		}
 	}
 	
@@ -46,7 +46,7 @@ public class Location implements Comparable<Location> {
 		return fuel;
 	}
 	
-	public HashMap<Location, Integer> getConnections() {
+	public ArrayList<Connection> getConnections() {
 		return connections;
 	}
 	
@@ -70,11 +70,13 @@ public class Location implements Comparable<Location> {
 	/*=======================================================================================*/
 	/* Edit */
 	
-	public void addConnection(Location location, int fuel) {
-		connections.put(location, fuel);
+	public void addConnection(Connection c) {
+		if (!connections.contains(c)) {
+			connections.add(c);
+		}
 	}
 	
-	public void setConnections(HashMap<Location, Integer> connections) {
+	public void setConnections(ArrayList<Connection> connections) {
 		this.connections = connections;
 	}
 	
@@ -108,7 +110,7 @@ public class Location implements Comparable<Location> {
 	/*=======================================================================================*/
 	/* Util */
 	
-	public double distance(Location location) {
+	public double linearDistance(Location location) {
 		return Math.sqrt(Math.pow((x-location.getX()), 2) +  Math.pow((y-location.getY()), 2));
 	}
 	

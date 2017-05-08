@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.PriorityQueue;
 
 import ProblemData.Location;
+import ProblemData.Connection;
 
 public class AStar {
 	private static HashMap<String, Distance> calculated_distances = new HashMap<String, Distance>();
@@ -34,11 +35,19 @@ public class AStar {
 		while (open.size() != 0) {
 			Location q = open.poll();
 			
-			for (Location successor: q.getConnections().keySet()) {
+			for (Connection connection: q.getConnections()) {
+				Location successor;
+				if (connection.getLocation1() == q) {
+					successor = connection.getLocation2();
+				}
+				else {
+					successor = connection.getLocation1();
+				}
+				
 				if (successor.equals(goal)) {
 					closed.add(q);
 					closed.add(successor);
-					double weight = q.getG() + successor.distance(q);
+					double weight = q.getG() + successor.linearDistance(q);
 					
 					Distance d = new Distance(start, goal, closed, weight);
 					calculated_distances.put(name1, d);
@@ -46,7 +55,7 @@ public class AStar {
 					return weight;
 				}
 				
-				double g = q.getG() + successor.distance(q);
+				double g = q.getG() + successor.linearDistance(q);
 				double h = heuristic(successor, goal);
 				double f = g + h;
 				
@@ -77,7 +86,7 @@ public class AStar {
 	}
 	
 	public static double heuristic(Location l, Location goal) {
-		return l.distance(goal);
+		return l.linearDistance(goal);
 	}
 	
 

@@ -21,7 +21,7 @@ public class Algorithm {
 			nodes.add(startLocation);
 			nodes = new ArrayList<Location>(new LinkedHashSet<Location>(nodes));
 			
-			Route route = GeneticAlgorithm.GeneticAlgorithm.run(nodes, 100, 50, false);
+			Route route = GeneticAlgorithm.GeneticAlgorithm.run(nodes, 500, 100, false);
 			System.out.println("============================");
 			System.out.println(route.getDistance());
 			System.out.println(route.getRoute());

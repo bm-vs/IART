@@ -1,4 +1,4 @@
-package ProblemData;
+package XMLParser;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
@@ -17,10 +17,14 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-public class XMLParser {	
-	public XMLParser() {}
-	
-	public void read(String docName, DeliveryInfo info) {
+import ProblemData.Connection;
+import ProblemData.DeliveryInfo;
+import ProblemData.Location;
+import ProblemData.Package;
+import UserInterface.GraphDisplay;
+
+public class XMLParser {
+	public static void read(String docName, DeliveryInfo info) {
 		try {
 			File inputFile = new File("data/" + docName + ".xml");
 			
@@ -56,8 +60,10 @@ public class XMLParser {
 				Location l1 = info.getLocation(location1);
 				Location l2 = info.getLocation(location2);
 				
-				l1.addConnection(l2, fuel);
-				l2.addConnection(l1, fuel);
+				Connection c = new Connection(l1, l2, fuel);
+				
+				l1.addConnection(c);
+				l2.addConnection(c);
 			}
 			
 			// Get truck info
@@ -91,8 +97,11 @@ public class XMLParser {
 		}
 	}
 
-	public void write(int nLocations, int maxX, int maxY, int nFuel, int nConnections, int maxFuel, int fuel, int load, int start, int nPackages, int maxVolume, int maxValue) {
+	public static void write(int nLocations, int maxX, int maxY, int connectionLevel, int nFuel, int maxFuel, int fuel, int load, int start, int nPackages, int maxVolume, int maxValue) {
 		try {
+			GraphDisplay graphDisplay = new GraphDisplay(true);
+			graphDisplay.display();
+			
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 			
@@ -102,23 +111,90 @@ public class XMLParser {
 			org.w3c.dom.Element rootElement = doc.createElement("deliveryInfo");
 			doc.appendChild(rootElement);
 			Scanner reader = new Scanner(System.in);
-			Random random = new Random();
+			Random random = new Random(1);
 			
 			//---------------------------------------------------------------------------
-			// Locations
+			// Locations and connections
 			org.w3c.dom.Element locations = doc.createElement("locations");
+			org.w3c.dom.Element connections = doc.createElement("connections");
 			rootElement.appendChild(locations);
-			ArrayList<Location> nodes = new ArrayList<Location>();
+			rootElement.appendChild(connections);
 			
-			//Create Locations
+			//Create Locations and connect to graph
+			ArrayList<Location> nodes = new ArrayList<Location>();
 			for (int i = 0; i < nLocations; i++) {
-				Integer id = i;
-				Integer x = (Integer) random.nextInt(maxX);
-				Integer y = (Integer) random.nextInt(maxY);
-				Location node = new Location(id,x,y,false);
+				boolean valid;
+				int x, y;
 				
+				// Create node
+				do {
+					valid = true;
+					x = (Integer) random.nextInt(maxX);
+					y = (Integer) random.nextInt(maxY);
+					
+					for (int j = 0; j < nodes.size(); j++) {
+						if (x == nodes.get(j).getX() && y == nodes.get(j).getY()) {
+							valid = false;
+							break;
+						}
+					}
+				} while(!valid);
+				
+				Location node = new Location(i,x,y,false);
+				graphDisplay.addNode(node);				
 				nodes.add(node);
 			}
+			
+			// Create connection of node to graph
+			ArrayList<Connection> edges = new ArrayList<Connection>();
+			ArrayList<Location> connected = new ArrayList<Location>();
+			ArrayList<Location> notConnected = new ArrayList<Location>();
+			
+			do {
+				connectNodes(nodes, edges, connected, notConnected, random, graphDisplay);
+			} while(notConnected.size() != 0);
+			
+			for (int i = 0; i < connectionLevel*connected.size(); i++) {
+				boolean valid = true;
+				Location l1 = connected.get(random.nextInt(connected.size()));
+				Location l2 = connected.get(random.nextInt(connected.size()));
+				
+				if (l1.equals(l2)) {
+					i--;
+					continue;
+				}
+				
+				Connection edge = new Connection(l1, l2);
+				
+				// Check if connection intersects existing ones
+				for (int j = 0; j < edges.size(); j++) {
+					if (edge.intersects(edges.get(j))) {							
+						valid = false;
+						break;
+					}
+				}
+				
+				// Check if connection contains other points
+				for (int j = 0; j < nodes.size(); j++) {
+					if (!nodes.get(j).equals(l1) && !nodes.get(j).equals(l2) && edge.contains(nodes.get(j))) {
+						valid = false;
+						break;
+					}
+				}
+				
+				if (valid && edges.contains(edge)) {
+					valid = false;
+				}
+				
+				if (valid) {
+					edges.add(edge);
+					graphDisplay.addEdge(edge);
+				}
+				else {
+					i--;
+				}
+			}
+			
 			//Generate fuel locations correctly
 			int nrFuelNodes = 0;
 			while(nrFuelNodes < nFuel*nodes.size()/100){
@@ -128,6 +204,7 @@ public class XMLParser {
 					nrFuelNodes++;
 				}
 			}
+			
 			//Insert locations in document
 			for(Location node : nodes){
 				org.w3c.dom.Element location = doc.createElement("location");
@@ -138,19 +215,13 @@ public class XMLParser {
 				location.setAttribute("fuel", ((Boolean)node.getFuel()).toString());
 			}
 			
-			
-			
-			//---------------------------------------------------------------------------
-			// Connections
-			org.w3c.dom.Element connections = doc.createElement("connections");
-			rootElement.appendChild(connections);
-			
-			for (int i = 0; i < nConnections; i++) {
+			// Insert connections in document
+			for (Connection edge : edges) {
 				org.w3c.dom.Element connection = doc.createElement("connection");
-				connections.appendChild(connection);
-				connection.setAttribute("location1", ((Integer) random.nextInt(nLocations)).toString());
-				connection.setAttribute("location2", ((Integer) random.nextInt(nLocations)).toString());
-				connection.setAttribute("fuel", ((Integer) (random.nextInt(maxFuel)+1)).toString());
+				locations.appendChild(connection);
+				connection.setAttribute("location1", ((Integer) edge.getLocation1().getID()).toString());
+				connection.setAttribute("location2", ((Integer) edge.getLocation2().getID()).toString());
+				connection.setAttribute("fuel", ((Integer) random.nextInt(maxFuel)).toString());
 			}
 			
 			//---------------------------------------------------------------------------
@@ -174,7 +245,7 @@ public class XMLParser {
 				dPackage.setAttribute("volume", ((Integer) (random.nextInt(maxVolume)+1)).toString());
 				dPackage.setAttribute("value", ((Integer) (random.nextInt(maxValue)+1)).toString());
 			}
-				
+			
 			//---------------------------------------------------------------------------
 			// Write to xml file
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -193,4 +264,74 @@ public class XMLParser {
 			tfe.printStackTrace();
 		}
 	}
+	
+	private static void connectNodes(ArrayList<Location> nodes, ArrayList<Connection> edges, ArrayList<Location> connected, ArrayList<Location> notConnected, Random random, GraphDisplay graphDisplay) {
+		for (Location node : nodes) {
+			if (connected.isEmpty()) {
+				connected.add(node);
+				continue;
+			}
+			
+			if (connected.contains(node)) {
+				continue;
+			}
+			
+			boolean valid, notFound = false;
+			Connection edge = new Connection();
+			int count = 0;
+			do {
+				valid = true;
+				Location l = connected.get(random.nextInt(connected.size()));
+				
+				if (l.equals(node)) {
+					valid = false;
+				}
+				
+				edge = new Connection(node, l);
+				
+				// Check if connection intersects existing ones
+				for (int j = 0; j < edges.size(); j++) {
+					if (edge.intersects(edges.get(j))) {							
+						valid = false;
+						break;
+					}
+				}
+				
+				// Check if connection contains other points
+				for (int j = 0; j < nodes.size(); j++) {
+					if (!nodes.get(j).equals(l) && !nodes.get(j).equals(node) && edge.contains(nodes.get(j))) {
+						valid = false;
+						break;
+					}
+				}
+				
+				if (valid && edges.contains(edge)) {
+					valid = false;
+				}
+				
+				if (valid) {
+					connected.add(node);
+				}
+				else {
+					count++;
+				}
+				
+				if (count == connected.size()) {
+					count = 0;
+					notConnected.add(node);
+					valid = true;
+					notFound = true;
+				}
+			} while (!valid);
+		
+			if (!notFound) {
+				edges.add(edge);
+				graphDisplay.addEdge(edge);
+				if (notConnected.contains(node)) {
+					notConnected.remove(node);
+				}
+				
+			}
+		}
+	}	
 }
