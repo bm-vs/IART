@@ -21,7 +21,7 @@ public class Algorithm {
 			nodes.add(startLocation);
 			nodes = new ArrayList<Location>(new LinkedHashSet<Location>(nodes));
 			
-			Route route = GeneticAlgorithm.GeneticAlgorithm.run(nodes, 500, 100, false);
+			Route route = GeneticAlgorithm.GeneticAlgorithm.run(nodes, 100, 50);
 			System.out.println("============================");
 			System.out.println(route.getDistance());
 			System.out.println(route.getRoute());
@@ -30,7 +30,21 @@ public class Algorithm {
 				ArrayList<Location> path = route.getPath().get(i);
 				for (int j = 0; j < path.size(); j++) {
 					System.out.print(" " + path.get(j) + "->");
-					UserInterface.UserInterface.gui.setNodeVisited(path.get(j));
+					if (path.get(j).equals(startLocation)) {
+						UserInterface.UserInterface.gui.setNodeStart(path.get(j));
+					}
+					else if (packages.contains(path.get(j))) {
+						
+					}
+					else {
+						UserInterface.UserInterface.gui.setNodeVisited(path.get(j));
+						
+						for (int k = 0; k < packages.size(); k++) {
+							if (packages.get(k).getLocation().equals(path.get(j))) {
+								UserInterface.UserInterface.gui.setNodeDelivery(path.get(j));
+							}
+						}
+					}
 					UserInterface.UserInterface.gui.setEdgeVisited(path.get(j), path.get((j+1)%path.size()));
 				}
 				

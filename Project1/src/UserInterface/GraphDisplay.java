@@ -19,7 +19,7 @@ public class GraphDisplay {
 		graph.addAttribute("ui.antialias");
 		graph.addAttribute("ui.quality");
 		/*==================================*/
-		graph.addAttribute("ui.stylesheet", "url('file:///../style/style.css')");
+		graph.addAttribute("ui.stylesheet", "url('file:///../style/style2.css')");
 		
 		// Create nodes
 		for (Integer key: info.getLocations().keySet()) {
@@ -80,6 +80,20 @@ public class GraphDisplay {
 		org.graphstream.graph.Node n = graph.getNode(location.getID());
 		if (n != null) {
 			n.addAttribute("ui.class", "visited");
+		}
+	}
+	
+	public void setNodeStart(Location location) {
+		org.graphstream.graph.Node n = graph.getNode(location.getID());
+		if (n != null) {
+			n.addAttribute("ui.class", "start");
+		}
+	}
+	
+	public void setNodeDelivery(Location location) {
+		org.graphstream.graph.Node n = graph.getNode(location.getID());
+		if (n != null) {
+			n.addAttribute("ui.class", "delivery");
 		}
 	}
 	

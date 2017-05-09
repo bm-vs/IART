@@ -10,6 +10,14 @@ node.visited {
 	fill-color: yellow;
 }
 
+node.start {
+	fill-color: red;
+}
+
+node.delivery {
+	fill-color: orange;
+}
+
 edge.visited {
 	fill-color: yellow;
 }

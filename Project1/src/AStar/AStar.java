@@ -1,6 +1,7 @@
 package AStar;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.PriorityQueue;
@@ -11,23 +12,23 @@ import ProblemData.Connection;
 public class AStar {
 	private static HashMap<String, Distance> calculated_distances = new HashMap<String, Distance>();
 	
-	public static double run(Location start, Location goal, ArrayList<Location> closed) {
+	public static double run(Location start, Location goal, ArrayList<Location> path) {
 		String name1 = start.getID() + "_" + goal.getID();
 		String name2 = goal.getID() + "_" + start.getID();
 		if (calculated_distances.containsKey(name1)) {
 			Distance d = calculated_distances.get(name1);
-			changeClosed(closed, d, false);
+			setPath(path, d, false);
 			return d.getWeight();
 		}
 		
 		if (calculated_distances.containsKey(name2)) {
 			Distance d = calculated_distances.get(name2);
-			changeClosed(closed, d, true);
+			setPath(path, d, true);
 			return d.getWeight();
 		}
 		
 		UserInterface.UserInterface.deliveryInfo.resetAStarVars();
-		closed.clear();
+		ArrayList<Location> closed = new ArrayList<Location>();
 		PriorityQueue<Location> open = new PriorityQueue<Location>();
 		
 		open.add(start);
@@ -47,9 +48,12 @@ public class AStar {
 				if (successor.equals(goal)) {
 					closed.add(q);
 					closed.add(successor);
+					successor.setParent(q);
 					double weight = q.getG() + successor.linearDistance(q);
 					
-					Distance d = new Distance(start, goal, closed, weight);
+					setPath(path, start, goal);
+					
+					Distance d = new Distance(start, goal, path, weight);
 					calculated_distances.put(name1, d);
 					
 					return weight;
@@ -102,17 +106,30 @@ public class AStar {
 		return false;
 	}
 	
-	public static void changeClosed(ArrayList<Location> closed, Distance d, boolean reverse) {
-		closed.clear();
+	public static void setPath(ArrayList<Location> path, Distance d, boolean reverse) {
+		path.clear();
 		if (reverse) {
 			for (int i = d.getPath().size()-1; i >= 0; i--) {
-				closed.add(d.getPath().get(i));
+				path.add(d.getPath().get(i));
 			}
 		}
 		else {
 			for (int i = 0; i < d.getPath().size(); i++) {
-				closed.add(d.getPath().get(i));
+				path.add(d.getPath().get(i));
 			}
 		}	
 	}
+	
+	public static void setPath(ArrayList<Location> path, Location start, Location goal) {
+		path.clear();
+		
+		Location l = goal;
+		while (l != null) {
+			path.add(l);
+			l = l.getParent();
+		}
+		
+		Collections.reverse(path);
+	}
+	
 }

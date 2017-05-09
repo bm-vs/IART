@@ -505,5 +505,8 @@
 <truck fuel="10" load="10" startlocation="10"/>
 <packages>
 <package location="62" value="1" volume="2"/>
+<package location="32" value="2" volume="4"/>
+<package location="73" value="8" volume="6"/>
+<package location="48" value="2" volume="4"/>
 </packages>
 </deliveryInfo>

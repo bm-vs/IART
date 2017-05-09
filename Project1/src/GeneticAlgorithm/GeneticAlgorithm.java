@@ -10,9 +10,9 @@ public class GeneticAlgorithm {
 	private static final int mutationUnit = 1000;
 	private static final int mutationRate = 15;
 	private static final int parentSelectionSize = 5;
-	//private static final boolean elitism = true;
+	private static boolean elitism = true;
 	
-	public static Route run(ArrayList<Location> nodes, int number_generations, int population_size, boolean elitist) {
+	public static Route run(ArrayList<Location> nodes, int number_generations, int population_size) {
 		Population population = new Population(population_size, nodes);
 		population.initialize();
 		for (int i = 0; i < number_generations; i++) {
@@ -27,6 +27,12 @@ public class GeneticAlgorithm {
 		
 		// elitism goes here
 		int elitismOffset = 0;
+		if (elitism) {
+			newPopulation.saveRoute(0, population.getFittest());
+			elitismOffset = 1;
+		}
+		
+		
 		for (int i = elitismOffset; i < newPopulation.getSize(); i++) {
 			
 			Route parent1 = parentSelection(population, nodes);

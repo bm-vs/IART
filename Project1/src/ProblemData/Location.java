@@ -12,6 +12,8 @@ public class Location implements Comparable<Location> {
 	private double h;
 	private Location parent;
 	
+	public Location(){}
+	
 	public Location(int id, int x, int y, boolean fuel) {
 		this.id = id;
 		this.x = x;

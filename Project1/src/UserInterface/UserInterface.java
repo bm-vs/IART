@@ -18,7 +18,6 @@ public class UserInterface {
 		decision = reader.nextInt();
 		
 		if (decision == 1) {
-			/*
 			System.out.println("----Locations----");
 			System.out.print("Number of locations: ");
 			int nLocations = reader.nextInt();
@@ -50,9 +49,7 @@ public class UserInterface {
 			int maxVolume = reader.nextInt();
 			System.out.print("Max. value: ");
 			int maxValue = reader.nextInt();
-			*/
-			//XMLParser.XMLParser.write(nLocations, maxX, maxY, nFuel, maxFuel, fuel, load, start, nPackages, maxVolume, maxValue);
-			XMLParser.XMLParser.write(100, 10, 10, 3, 10, 10, 10, 10, 10, 10, 10, 10);
+			XMLParser.XMLParser.write(nLocations, maxX, maxY, connectionLevel, nFuel, maxFuel, fuel, load, start, nPackages, maxVolume, maxValue);
 			System.out.println("Finished generating scenario");
 		}
 		else if (decision == 2){
@@ -60,23 +57,9 @@ public class UserInterface {
 			String file = reader.nextLine(); file = reader.nextLine();
 			deliveryInfo = new DeliveryInfo();
 			XMLParser.XMLParser.read(file, deliveryInfo);
-			/*
-			for (Integer i : deliveryInfo.getLocations().keySet()) {
-				Location l = deliveryInfo.getLocation(i);
-				System.out.println(l.getID());
-				System.out.println(l.getConnections());
-			}
-			*/
-			
 			gui = new GraphDisplay();				
 			Algorithm alg = new Algorithm();
 			alg.run("max_deliveries");
-			
-			//ArrayList<Location> closed = new ArrayList<Location>();
-			//double total = AStar.AStar.run(deliveryInfo.getLocation(10), deliveryInfo.getLocation(34), closed) + AStar.AStar.run(deliveryInfo.getLocation(34), deliveryInfo.getLocation(32), closed) + AStar.AStar.run(deliveryInfo.getLocation(32), deliveryInfo.getLocation(3), closed) + AStar.AStar.run(deliveryInfo.getLocation(3), deliveryInfo.getLocation(62), closed);
-			//double total = AStar.AStar.run(deliveryInfo.getLocation(10), deliveryInfo.getLocation(62), closed);
-			
-			//System.out.println(total*2);
 		}
 		else if (decision != 3) {
 			reader.close();
