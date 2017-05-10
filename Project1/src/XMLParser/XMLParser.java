@@ -111,7 +111,7 @@ public class XMLParser {
 			org.w3c.dom.Element rootElement = doc.createElement("deliveryInfo");
 			doc.appendChild(rootElement);
 			Scanner reader = new Scanner(System.in);
-			Random random = new Random(1);
+			Random random = new Random(22);
 			
 			//---------------------------------------------------------------------------
 			// Locations and connections
@@ -151,9 +151,22 @@ public class XMLParser {
 			ArrayList<Location> notConnected = new ArrayList<Location>();
 			
 			do {
+				graphDisplay.resetNodeColors();
 				connectNodes(nodes, edges, connected, notConnected, random, graphDisplay);
+				for (Location l : notConnected) {
+					graphDisplay.setNodeDelivery(l);
+				}
+				
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
+				
 			} while(notConnected.size() != 0);
 			
+			long startTime = System.currentTimeMillis();
 			for (int i = 0; i < connectionLevel*connected.size(); i++) {
 				boolean valid = true;
 				Location l1 = connected.get(random.nextInt(connected.size()));
@@ -193,11 +206,15 @@ public class XMLParser {
 				else {
 					i--;
 				}
+				
+				if (System.currentTimeMillis()-startTime > 3000) {
+					break;
+				}
 			}
 			
 			//Generate fuel locations correctly
 			int nrFuelNodes = 0;
-			while(nrFuelNodes < nFuel*nodes.size()/100){
+			while(nrFuelNodes < nFuel){
 				int nodeindex = random.nextInt(nodes.size());
 				if(!nodes.get(nodeindex).getFuel()){
 					nodes.get(nodeindex).setFuel(true);
@@ -309,18 +326,17 @@ public class XMLParser {
 					valid = false;
 				}
 				
-				if (valid) {
-					connected.add(node);
-				}
-				else {
+			
+				if (!valid) {
 					count++;
-				}
-				
-				if (count == connected.size()) {
-					count = 0;
-					notConnected.add(node);
-					valid = true;
-					notFound = true;
+					if (count == connected.size()) {
+						count = 0;
+						if (!notConnected.contains(node)) {
+							notConnected.add(node);
+						}
+						valid = true;
+						notFound = true;
+					}
 				}
 			} while (!valid);
 		
@@ -330,7 +346,9 @@ public class XMLParser {
 				if (notConnected.contains(node)) {
 					notConnected.remove(node);
 				}
-				
+				if (!connected.contains(node)) {
+					connected.add(node);
+				}
 			}
 		}
 	}	

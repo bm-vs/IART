@@ -9,16 +9,18 @@ public class Population {
 	private ArrayList<Route> routes;
 	private ArrayList<Location> nodes;
 	private int size;
+	private Location start;
 	
-	public Population(int population_size, ArrayList<Location> nodes) {
+	public Population(int population_size, ArrayList<Location> nodes, Location start) {
 		routes = new ArrayList<Route>(Collections.nCopies(population_size, null));
 		this.nodes = nodes;
 		this.size = population_size;
+		this.start = start;
 	}
 	
 	public void initialize() {
 		for (int i = 0; i < size; i++) {
-			Route route = new Route(nodes);
+			Route route = new Route(nodes, start);
 			routes.set(i, route);
 		}
 	}

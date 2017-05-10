@@ -102,10 +102,10 @@ public class Location implements Comparable<Location> {
 		this.parent = parent;
 	}
 	
-	public void setAStarVars(double g, double f, double h, Location parent) {
+	public void setAStarVars(double g, double h, double f, Location parent) {
 		this.g = g;
-		this.f = f;
 		this.h = h;
+		this.f = f;
 		this.parent = parent;
 	}
 	
@@ -120,6 +120,7 @@ public class Location implements Comparable<Location> {
 		return l.getID() == id;
 	}
 	
+	@Override
 	public int compareTo(Location l) {		
 		return Double.compare(f, l.getF());
 	}

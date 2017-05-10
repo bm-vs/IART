@@ -7,23 +7,23 @@ import ProblemData.Location;
 public class GeneticAlgorithm {
 	
 	/* Genetic algorithm parameters */
-	private static final int mutationUnit = 1000;
+	private static final int mutationUnit = 10000;
 	private static final int mutationRate = 15;
 	private static final int parentSelectionSize = 5;
 	private static boolean elitism = true;
 	
-	public static Route run(ArrayList<Location> nodes, int number_generations, int population_size) {
-		Population population = new Population(population_size, nodes);
+	public static Route run(ArrayList<Location> nodes, Location start, int number_generations, int population_size) {
+		Population population = new Population(population_size, nodes, start);
 		population.initialize();
 		for (int i = 0; i < number_generations; i++) {
-			population = evolvePopulation(population, nodes);
+			population = evolvePopulation(population, nodes, start);
 		}
 		
 		return population.getFittest();
 	}
 	
-	public static Population evolvePopulation(Population population, ArrayList<Location> nodes) {
-		Population newPopulation = new Population(population.getSize(), nodes);
+	public static Population evolvePopulation(Population population, ArrayList<Location> nodes, Location start) {
+		Population newPopulation = new Population(population.getSize(), nodes, start);
 		
 		// elitism goes here
 		int elitismOffset = 0;
@@ -34,9 +34,8 @@ public class GeneticAlgorithm {
 		
 		
 		for (int i = elitismOffset; i < newPopulation.getSize(); i++) {
-			
-			Route parent1 = parentSelection(population, nodes);
-			Route parent2 = parentSelection(population, nodes);			
+			Route parent1 = parentSelection(population, nodes, start);
+			Route parent2 = parentSelection(population, nodes, start);			
 			Route child = crossover(parent1, parent2);
 			newPopulation.saveRoute(i, child);
 		}
@@ -48,8 +47,8 @@ public class GeneticAlgorithm {
 		return population;
 	}
 	
-	public static Route parentSelection(Population population, ArrayList<Location> nodes) {
-		Population selection = new Population(parentSelectionSize, nodes);
+	public static Route parentSelection(Population population, ArrayList<Location> nodes, Location start) {
+		Population selection = new Population(parentSelectionSize, nodes, start);
 		
 		for (int i = 0; i < parentSelectionSize; i++) {
 			Random rand = new Random();
@@ -65,8 +64,8 @@ public class GeneticAlgorithm {
 		Route child = new Route(n_nodes);
 		
 		Random rand = new Random();
-		int startPos = rand.nextInt(n_nodes);
-		int endPos = rand.nextInt(n_nodes);
+		int startPos = rand.nextInt(n_nodes-1) + 1;
+		int endPos = rand.nextInt(n_nodes-1) + 1;
 		if (endPos < startPos) {
 			int tmp = startPos;
 			startPos = endPos;
@@ -95,9 +94,9 @@ public class GeneticAlgorithm {
 	
 	private static void mutate(Route route) {
 		Random rand = new Random();
-		for (int i = 0; i < route.getSize(); i++) {
+		for (int i = 1; i < route.getSize(); i++) {
 			if (rand.nextInt(mutationUnit) < mutationRate) {
-				int j = rand.nextInt(route.getSize());
+				int j = rand.nextInt(route.getSize()-1) + 1;
 				
 				Location l1 = route.getLocation(i);
 				Location l2 = route.getLocation(j);

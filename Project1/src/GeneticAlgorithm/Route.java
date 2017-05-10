@@ -20,10 +20,17 @@ public class Route {
 		distance = 0;
 	}
 	
-	public Route(ArrayList<Location> nodes) {
-		route = new ArrayList<Location>(nodes);
+	public Route(ArrayList<Location> nodes, Location start) {
+		route = new ArrayList<Location>();
+		for (Location l: nodes) {
+			if (!l.equals(start)) {
+				route.add(l);
+			}
+		}
+		
 		path = new ArrayList<ArrayList<Location>>();
 		Collections.shuffle(route);
+		route.add(0, start);
 		fitness = 0;
 		distance = 0;
 	}

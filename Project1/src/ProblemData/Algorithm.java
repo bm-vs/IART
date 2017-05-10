@@ -2,6 +2,7 @@ package ProblemData;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
+import AStar.AStar;
 import GeneticAlgorithm.Route;
 
 public class Algorithm {	
@@ -21,35 +22,30 @@ public class Algorithm {
 			nodes.add(startLocation);
 			nodes = new ArrayList<Location>(new LinkedHashSet<Location>(nodes));
 			
-			Route route = GeneticAlgorithm.GeneticAlgorithm.run(nodes, 100, 50);
+			Route route = GeneticAlgorithm.GeneticAlgorithm.run(nodes, startLocation, 10000, 50);
+			System.out.println();
 			System.out.println("============================");
+			System.out.println("Genetic");
+			ArrayList<Location> fullRoute = new ArrayList<Location>(route.getRoute());
+			fullRoute.add(startLocation);
+			System.out.println(fullRoute);
 			System.out.println(route.getDistance());
-			System.out.println(route.getRoute());
+			UserInterface.UserInterface.gui.addPath(fullRoute, startLocation, packages, "genetic");
+
+			System.out.println("============================");
+			System.out.println("A*");
 			
-			for (int i = 0; i < route.getPath().size(); i++) {
-				ArrayList<Location> path = route.getPath().get(i);
-				for (int j = 0; j < path.size(); j++) {
-					System.out.print(" " + path.get(j) + "->");
-					if (path.get(j).equals(startLocation)) {
-						UserInterface.UserInterface.gui.setNodeStart(path.get(j));
-					}
-					else if (packages.contains(path.get(j))) {
-						
-					}
-					else {
-						UserInterface.UserInterface.gui.setNodeVisited(path.get(j));
-						
-						for (int k = 0; k < packages.size(); k++) {
-							if (packages.get(k).getLocation().equals(path.get(j))) {
-								UserInterface.UserInterface.gui.setNodeDelivery(path.get(j));
-							}
-						}
-					}
-					UserInterface.UserInterface.gui.setEdgeVisited(path.get(j), path.get((j+1)%path.size()));
-				}
-				
-				System.out.println();
+			ArrayList<Location> importantNodes = new ArrayList<Location>();
+			for (Package p : UserInterface.UserInterface.deliveryInfo.getDeliveries()) {
+				importantNodes.add(p.getLocation());
 			}
+			
+			importantNodes.add(startLocation);
+			ArrayList<Location> aStarRoute = new ArrayList<Location>();
+			double weight = AStar.circuitAstar(importantNodes, startLocation, aStarRoute);
+			System.out.println(aStarRoute);
+			System.out.println(weight);
+			UserInterface.UserInterface.gui.addPath(fullRoute, startLocation, packages, "astar");
 		}
 	}		
 }
