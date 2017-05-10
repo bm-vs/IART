@@ -82,7 +82,7 @@ public class GraphDisplay {
 	public void addPath(ArrayList<Location> route, Location startLocation, ArrayList<ProblemData.Package> packages, String type) {
 		for (int i = 0; i < route.size()-1; i++) {
 			ArrayList<Location> path = new ArrayList<Location>();
-			AStar.AStar.run(route.get(i), route.get(i+1), path);
+			AStar.AStar.shortestDistance(route.get(i), route.get(i+1), path);
 			
 			for (int j = 0; j < path.size()-1; j++) {
 				if (path.get(j).equals(startLocation)) {

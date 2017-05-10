@@ -12,66 +12,92 @@ import ProblemData.Connection;
 public class AStar {
 	private static HashMap<String, Distance> calculated_distances = new HashMap<String, Distance>();
 	
-	public static double circuitAstar(ArrayList<Location> nodes, Location start, ArrayList<Location> closed) {
+	public static AStarRoute hamiltonianPathAStar(ArrayList<Location> nodes, Location start) {
 		for (int i = 0; i < nodes.size(); i++) {
 			nodes.get(i).setAStarVars(0, 0, 0, null);
 		}
 		
-		PriorityQueue<Location> open = new PriorityQueue<Location>();
+		PriorityQueue<AStarRoute> open = new PriorityQueue<AStarRoute>();
+		ArrayList<AStarRoute> closed = new ArrayList<AStarRoute>();
 		
-		open.add(start);
+		AStarRoute startRoute = new AStarRoute(start);
+		open.add(startRoute);
 		
 		while (open.size() != 0) {
-			Location q = open.poll();
+			AStarRoute q = open.poll();
 			
 			for (Location newNode : nodes) {
-				Location successor;
-				if (newNode.equals(q)) {
+				AStarRoute successor = new AStarRoute(q);
+				successor.addLocation(newNode);
+			 
+				if (newNode.equals(start) && successor.getRoute().size() == nodes.size()+1) {
+					return successor;
+				}
+				
+				if (q.contains(newNode)) {
 					continue;
 				}
 				
-				successor = newNode;
-				
-				if (successor.equals(start) && closed.size() == nodes.size()-1) {
-					closed.add(q);
-					closed.add(successor);
-					successor.setParent(q);
-					
-					return getTotalWeight(closed);
-				}
-				
-				ArrayList<Location> partial_path = new ArrayList<Location>();
-				double g = q.getG() + run(q, successor, partial_path);
-				double h = circuitHeuristic(nodes, successor, q);
+				double g = successor.getDistance();
+				double h = hamiltonianPathHeuristic(successor, nodes, start);
 				double f = g + h;
 				
-				if (inContainer(successor, open)) {
-					if (successor.getF() > f) {
-						open.remove(successor);
-						successor.setAStarVars(g, h, f, q);
-						open.add(successor);
-					}
-				}
-				else if (inContainer(successor, closed)) {
-					if (successor.getF() > f) {
-						closed.remove(successor);
-						successor.setAStarVars(g, h, f, q);
-						open.add(successor);
-					}
-				}
-				else {
-					successor.setAStarVars(g, h, f, q);
-					open.add(successor);
-				}
+				successor.setHeuristic(f);
+				open.add(successor);
 			}
 			
 			closed.add(q);
 		}
 		
-		return Integer.MAX_VALUE;
+		return null;
 	}	
 	
-	public static double run(Location start, Location goal, ArrayList<Location> path) {
+	public static double hamiltonianPathHeuristic(AStarRoute route, ArrayList<Location> everyNode, Location start) {		
+		ArrayList<Location> remainingNodes = new ArrayList<Location>();
+		
+		for (Location n : everyNode) {
+			if (!route.contains(n)) {
+				remainingNodes.add(n);
+			}
+		}
+		remainingNodes.add(start);
+		
+		return minimumSpanningTree(remainingNodes);
+	}
+	
+	private static double minimumSpanningTree(ArrayList<Location> nodes) {
+		if (nodes.size() == 0) {
+			return 0;
+		}
+		
+		ArrayList<Location> tree = new ArrayList<Location>();
+		tree.add(nodes.get(0));
+		
+		while (tree.size() != nodes.size()) {
+			Location add = null;
+			double min = Integer.MAX_VALUE;
+			
+			for (Location l1 : tree) {
+				for (Location l2 : nodes) {
+					if (!tree.contains(l2)) {
+						ArrayList<Location> p = new ArrayList<Location>();
+						double d = shortestDistance(l1, l2, p);
+						if (d < min) {
+							add = l2;
+							min = d;
+						}
+					}
+				}
+			}
+			
+			tree.add(add);
+		}
+		
+		return 0;
+	}
+	
+	
+	public static double shortestDistance(Location start, Location goal, ArrayList<Location> path) {
 		String name1 = start.getID() + "_" + goal.getID();
 		String name2 = goal.getID() + "_" + start.getID();
 		if (calculated_distances.containsKey(name1)) {
@@ -151,21 +177,6 @@ public class AStar {
 	public static double heuristic(Location l, Location goal) {
 		return l.linearDistance(goal);
 	}
-	
-	public static double circuitHeuristic(ArrayList<Location> nodes, Location l, Location q) {
-		double min = Integer.MAX_VALUE;
-		
-		for (Location n : nodes) {
-			if (n.linearDistance(l) < min && !n.equals(l) && !n.equals(q)) {
-				ArrayList<Location> a = new ArrayList<Location>();
-				min = run(l, n, a);//(n.linearDistance(l)+n.linearDistance(q))/2;
-			}
-			
-		}
-		
-		return min;
-	}
-	
 
 	public static boolean inContainer(Location successor, AbstractCollection<Location> container) {
 		Iterator<Location> it = container.iterator();
@@ -210,7 +221,7 @@ public class AStar {
 		
 		for (int i = 0; i < list.size()-1; i++) {
 			ArrayList<Location> path = new ArrayList<Location>();
-			total += AStar.run(list.get(i), list.get(i+1), path);
+			total += AStar.shortestDistance(list.get(i), list.get(i+1), path);
 		}
 		
 		return total;

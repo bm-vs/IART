@@ -50,7 +50,7 @@ public class Route {
 				Location end = route.get((i+1) % route.size());
 				
 				ArrayList<Location> partial_path = new ArrayList<Location>();
-				distance += AStar.run(start, end, partial_path);
+				distance += AStar.shortestDistance(start, end, partial_path);
 				path.add(partial_path);
 			}
 		}

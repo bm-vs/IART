@@ -376,5 +376,7 @@
 <package location="5" value="70" volume="36"/>
 <package location="72" value="73" volume="27"/>
 <package location="34" value="12" volume="5"/>
+<package location="22" value="12" volume="5"/>
+<package location="60" value="12" volume="5"/>
 </packages>
 </deliveryInfo>

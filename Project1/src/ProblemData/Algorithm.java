@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
 import AStar.AStar;
+import AStar.AStarRoute;
 import GeneticAlgorithm.Route;
 
 public class Algorithm {	
@@ -41,11 +42,11 @@ public class Algorithm {
 			}
 			
 			importantNodes.add(startLocation);
-			ArrayList<Location> aStarRoute = new ArrayList<Location>();
-			double weight = AStar.circuitAstar(importantNodes, startLocation, aStarRoute);
+			importantNodes = new ArrayList<Location>(new LinkedHashSet<Location>(importantNodes));
+			AStarRoute aStarRoute = AStar.hamiltonianPathAStar(importantNodes, startLocation);
 			System.out.println(aStarRoute);
-			System.out.println(weight);
-			UserInterface.UserInterface.gui.addPath(fullRoute, startLocation, packages, "astar");
+			System.out.println(aStarRoute.getDistance());
+			UserInterface.UserInterface.gui.addPath(aStarRoute.getRoute(), startLocation, packages, "astar");
 		}
 	}		
 }

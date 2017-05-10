@@ -18,7 +18,6 @@ public class UserInterface {
 		decision /*= 2;*/= reader.nextInt();
 		
 		if (decision == 1) {
-			/*
 			System.out.println("----Locations----");
 			System.out.print("Number of locations: ");
 			int nLocations = reader.nextInt();
@@ -49,14 +48,13 @@ public class UserInterface {
 			System.out.print("Max. volume: ");
 			int maxVolume = reader.nextInt();
 			System.out.print("Max. value: ");
-			int maxValue = reader.nextInt();*/
-			//XMLParser.XMLParser.write(nLocations, maxX, maxY, connectionLevel, nFuel, maxFuel, fuel, load, start, nPackages, maxVolume, maxValue);
-			XMLParser.XMLParser.write(400, 20, 20, 2, 3, 15, 300, 300, 1, 20, 50, 100);
+			int maxValue = reader.nextInt();
+			XMLParser.XMLParser.write(nLocations, maxX, maxY, connectionLevel, nFuel, maxFuel, fuel, load, start, nPackages, maxVolume, maxValue);
 			System.out.println("Finished generating scenario");
 		}
 		else if (decision == 2){
 			System.out.print("Document name: ");
-			/*String file = "1494275813950"; */ String file = reader.nextLine(); file = reader.nextLine();
+			String file = reader.nextLine(); file = reader.nextLine();
 			
 			deliveryInfo = new DeliveryInfo();
 			XMLParser.XMLParser.read(file, deliveryInfo);

@@ -88,8 +88,8 @@
 <packages>
 <package location="10" value="15" volume="19"/>
 <package location="15" value="46" volume="98"/>
-<package location="1" value="85" volume="52"/>
 <package location="13" value="93" volume="86"/>
 <package location="21" value="39" volume="19"/>
+<package location="7" value="93" volume="86"/>
 </packages>
 </deliveryInfo>
