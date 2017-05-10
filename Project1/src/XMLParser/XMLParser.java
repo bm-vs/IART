@@ -55,12 +55,11 @@ public class XMLParser {
 				org.w3c.dom.Element eElement = (org.w3c.dom.Element) nList.item(i);
 				int location1 = Integer.parseInt(eElement.getAttribute("location1"));
 				int location2 = Integer.parseInt(eElement.getAttribute("location2"));
-				int fuel = Integer.parseInt(eElement.getAttribute("fuel"));
 				
 				Location l1 = info.getLocation(location1);
 				Location l2 = info.getLocation(location2);
 				
-				Connection c = new Connection(l1, l2, fuel);
+				Connection c = new Connection(l1, l2);
 				
 				l1.addConnection(c);
 				l2.addConnection(c);
@@ -73,9 +72,10 @@ public class XMLParser {
 				int fuel = Integer.parseInt(eElement.getAttribute("fuel"));
 				int load = Integer.parseInt(eElement.getAttribute("load"));
 				int startlocation = Integer.parseInt(eElement.getAttribute("startlocation"));
+				int fuelPerKm = Integer.parseInt(eElement.getAttribute("fuelPerKm"));
 				
 				Location l1 = info.getLocation(startlocation);
-				info.setTruck(fuel, load, l1);
+				info.setTruck(fuel, load, l1, fuelPerKm);
 			}
 			
 			// Get packages
@@ -97,7 +97,7 @@ public class XMLParser {
 		}
 	}
 
-	public static void write(int nLocations, int maxX, int maxY, int connectionLevel, int nFuel, int maxFuel, int fuel, int load, int start, int nPackages, int maxVolume, int maxValue) {
+	public static void write(int nLocations, int maxX, int maxY, int connectionLevel, int nFuel, int fuelPerUnit, int fuel, int load, int start, int nPackages, int maxVolume, int maxValue) {
 		try {
 			GraphDisplay graphDisplay = new GraphDisplay(true);
 			graphDisplay.display();
@@ -235,10 +235,9 @@ public class XMLParser {
 			// Insert connections in document
 			for (Connection edge : edges) {
 				org.w3c.dom.Element connection = doc.createElement("connection");
-				locations.appendChild(connection);
+				connections.appendChild(connection);
 				connection.setAttribute("location1", ((Integer) edge.getLocation1().getID()).toString());
 				connection.setAttribute("location2", ((Integer) edge.getLocation2().getID()).toString());
-				connection.setAttribute("fuel", ((Integer) random.nextInt(maxFuel)).toString());
 			}
 			
 			//---------------------------------------------------------------------------
@@ -249,6 +248,7 @@ public class XMLParser {
 			truck.setAttribute("fuel", Integer.toString(fuel));
 			truck.setAttribute("load", Integer.toString(load));
 			truck.setAttribute("startlocation", Integer.toString(start));
+			truck.setAttribute("fuelPerKm", Integer.toString(fuelPerUnit));
 			
 			//---------------------------------------------------------------------------
 			// Packages

@@ -26,65 +26,65 @@
 <location fuel="false" id="22" x="1" y="1"/>
 <location fuel="false" id="23" x="0" y="3"/>
 <location fuel="false" id="24" x="3" y="1"/>
-<connection fuel="14" location1="1" location2="0"/>
-<connection fuel="3" location1="3" location2="1"/>
-<connection fuel="3" location1="5" location2="3"/>
-<connection fuel="14" location1="6" location2="5"/>
-<connection fuel="7" location1="7" location2="3"/>
-<connection fuel="1" location1="8" location2="0"/>
-<connection fuel="3" location1="9" location2="3"/>
-<connection fuel="14" location1="10" location2="0"/>
-<connection fuel="1" location1="11" location2="6"/>
-<connection fuel="13" location1="12" location2="3"/>
-<connection fuel="6" location1="14" location2="1"/>
-<connection fuel="13" location1="16" location2="12"/>
-<connection fuel="14" location1="19" location2="0"/>
-<connection fuel="4" location1="20" location2="10"/>
-<connection fuel="11" location1="21" location2="12"/>
-<connection fuel="10" location1="22" location2="1"/>
-<connection fuel="7" location1="23" location2="9"/>
-<connection fuel="11" location1="24" location2="12"/>
-<connection fuel="11" location1="2" location2="8"/>
-<connection fuel="11" location1="4" location2="0"/>
-<connection fuel="14" location1="13" location2="1"/>
-<connection fuel="8" location1="15" location2="3"/>
-<connection fuel="4" location1="17" location2="15"/>
-<connection fuel="1" location1="18" location2="3"/>
-<connection fuel="7" location1="5" location2="11"/>
-<connection fuel="12" location1="3" location2="10"/>
-<connection fuel="6" location1="8" location2="7"/>
-<connection fuel="7" location1="5" location2="23"/>
-<connection fuel="10" location1="3" location2="20"/>
-<connection fuel="8" location1="18" location2="17"/>
-<connection fuel="10" location1="19" location2="4"/>
-<connection fuel="13" location1="5" location2="9"/>
-<connection fuel="2" location1="13" location2="20"/>
-<connection fuel="13" location1="10" location2="2"/>
-<connection fuel="4" location1="17" location2="3"/>
-<connection fuel="8" location1="3" location2="22"/>
-<connection fuel="4" location1="2" location2="3"/>
-<connection fuel="5" location1="21" location2="1"/>
-<connection fuel="13" location1="14" location2="24"/>
-<connection fuel="5" location1="19" location2="1"/>
-<connection fuel="12" location1="20" location2="1"/>
-<connection fuel="3" location1="2" location2="7"/>
-<connection fuel="1" location1="13" location2="0"/>
-<connection fuel="3" location1="21" location2="22"/>
-<connection fuel="1" location1="16" location2="15"/>
-<connection fuel="4" location1="11" location2="7"/>
-<connection fuel="5" location1="22" location2="12"/>
-<connection fuel="0" location1="3" location2="16"/>
-<connection fuel="13" location1="5" location2="7"/>
-<connection fuel="6" location1="14" location2="12"/>
-<connection fuel="0" location1="1" location2="24"/>
-<connection fuel="10" location1="10" location2="13"/>
-<connection fuel="3" location1="6" location2="23"/>
-<connection fuel="12" location1="10" location2="8"/>
-<connection fuel="11" location1="24" location2="21"/>
-<connection fuel="10" location1="0" location2="7"/>
+<connection location1="1" location2="0"/>
+<connection location1="3" location2="1"/>
+<connection location1="5" location2="3"/>
+<connection location1="6" location2="5"/>
+<connection location1="7" location2="3"/>
+<connection location1="8" location2="0"/>
+<connection location1="9" location2="3"/>
+<connection location1="10" location2="0"/>
+<connection location1="11" location2="6"/>
+<connection location1="12" location2="3"/>
+<connection location1="14" location2="1"/>
+<connection location1="16" location2="12"/>
+<connection location1="19" location2="0"/>
+<connection location1="20" location2="10"/>
+<connection location1="21" location2="12"/>
+<connection location1="22" location2="1"/>
+<connection location1="23" location2="9"/>
+<connection location1="24" location2="12"/>
+<connection location1="2" location2="8"/>
+<connection location1="4" location2="0"/>
+<connection location1="13" location2="1"/>
+<connection location1="15" location2="3"/>
+<connection location1="17" location2="15"/>
+<connection location1="18" location2="3"/>
+<connection location1="5" location2="11"/>
+<connection location1="3" location2="10"/>
+<connection location1="8" location2="7"/>
+<connection location1="5" location2="23"/>
+<connection location1="3" location2="20"/>
+<connection location1="18" location2="17"/>
+<connection location1="19" location2="4"/>
+<connection location1="5" location2="9"/>
+<connection location1="13" location2="20"/>
+<connection location1="10" location2="2"/>
+<connection location1="17" location2="3"/>
+<connection location1="3" location2="22"/>
+<connection location1="2" location2="3"/>
+<connection location1="21" location2="1"/>
+<connection location1="14" location2="24"/>
+<connection location1="19" location2="1"/>
+<connection location1="20" location2="1"/>
+<connection location1="2" location2="7"/>
+<connection location1="13" location2="0"/>
+<connection location1="21" location2="22"/>
+<connection location1="16" location2="15"/>
+<connection location1="11" location2="7"/>
+<connection location1="22" location2="12"/>
+<connection location1="3" location2="16"/>
+<connection location1="5" location2="7"/>
+<connection location1="14" location2="12"/>
+<connection location1="1" location2="24"/>
+<connection location1="10" location2="13"/>
+<connection location1="6" location2="23"/>
+<connection location1="10" location2="8"/>
+<connection location1="24" location2="21"/>
+<connection location1="0" location2="7"/>
 </locations>
 <connections/>
-<truck fuel="200" load="200" startlocation="1"/>
+<truck load="200" startlocation="1" fuelPerKm="1"/>
 <packages>
 <package location="10" value="15" volume="19"/>
 <package location="15" value="46" volume="98"/>

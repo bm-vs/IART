@@ -12,41 +12,39 @@ public class Algorithm {
 	}
 	
 	public void run(String opt) {
-		if (opt.equals("max_deliveries")) {
-			ArrayList<Location> nodes = new ArrayList<Location>();
-			ArrayList<Package> packages = UserInterface.UserInterface.deliveryInfo.getDeliveries();
-			for (int i = 0; i < packages.size(); i++) {
-				nodes.add(packages.get(i).getLocation());
-			}
-			
-			Location startLocation = UserInterface.UserInterface.deliveryInfo.getTruck().getLocation();
-			nodes.add(startLocation);
-			nodes = new ArrayList<Location>(new LinkedHashSet<Location>(nodes));
-			
-			Route route = GeneticAlgorithm.GeneticAlgorithm.run(nodes, startLocation, 10000, 50);
-			System.out.println();
-			System.out.println("============================");
-			System.out.println("Genetic");
-			ArrayList<Location> fullRoute = new ArrayList<Location>(route.getRoute());
-			fullRoute.add(startLocation);
-			System.out.println(fullRoute);
-			System.out.println(route.getDistance());
-			UserInterface.UserInterface.gui.addPath(fullRoute, startLocation, packages, "genetic");
-
-			System.out.println("============================");
-			System.out.println("A*");
-			
-			ArrayList<Location> importantNodes = new ArrayList<Location>();
-			for (Package p : UserInterface.UserInterface.deliveryInfo.getDeliveries()) {
-				importantNodes.add(p.getLocation());
-			}
-			
-			importantNodes.add(startLocation);
-			importantNodes = new ArrayList<Location>(new LinkedHashSet<Location>(importantNodes));
-			AStarRoute aStarRoute = AStar.hamiltonianPathAStar(importantNodes, startLocation);
-			System.out.println(aStarRoute);
-			System.out.println(aStarRoute.getDistance());
-			UserInterface.UserInterface.gui.addPath(aStarRoute.getRoute(), startLocation, packages, "astar");
+		ArrayList<Location> nodes = new ArrayList<Location>();
+		ArrayList<Package> packages = UserInterface.UserInterface.deliveryInfo.getDeliveries();
+		for (int i = 0; i < packages.size(); i++) {
+			nodes.add(packages.get(i).getLocation());
 		}
+		
+		Location startLocation = UserInterface.UserInterface.deliveryInfo.getTruck().getLocation();
+		nodes.add(startLocation);
+		nodes = new ArrayList<Location>(new LinkedHashSet<Location>(nodes));
+		
+		Route route = GeneticAlgorithm.GeneticAlgorithm.run(nodes, startLocation, 10000, 50);
+		System.out.println();
+		System.out.println("============================");
+		System.out.println("Genetic");
+		ArrayList<Location> fullRoute = new ArrayList<Location>(route.getRoute());
+		fullRoute.add(startLocation);
+		System.out.println(fullRoute);
+		System.out.println(route.getDistance());
+		UserInterface.UserInterface.gui.addPath(fullRoute, startLocation, packages, "genetic");
+
+		System.out.println("============================");
+		System.out.println("A*");
+		
+		ArrayList<Location> importantNodes = new ArrayList<Location>();
+		for (Package p : UserInterface.UserInterface.deliveryInfo.getDeliveries()) {
+			importantNodes.add(p.getLocation());
+		}
+		
+		importantNodes.add(startLocation);
+		importantNodes = new ArrayList<Location>(new LinkedHashSet<Location>(importantNodes));
+		AStarRoute aStarRoute = AStar.hamiltonianPathAStar(importantNodes, startLocation, opt);
+		System.out.println(aStarRoute);
+		System.out.println(aStarRoute.getDistance());
+		UserInterface.UserInterface.gui.addPath(aStarRoute.getRoute(), startLocation, packages, "astar");
 	}		
 }

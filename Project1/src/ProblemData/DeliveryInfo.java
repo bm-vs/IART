@@ -40,8 +40,8 @@ public class DeliveryInfo {
 		locations.put(id, location);
 	}
 	
-	public void setTruck(int fuel, int load, Location location) {
-		truck = new Truck(fuel, load, location);
+	public void setTruck(int fuel, int load, Location location, int fuelPerKm) {
+		truck = new Truck(fuel, load, location, fuelPerKm);
 	}
 	
 	public void addPackage(Package delivery) {

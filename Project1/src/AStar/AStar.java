@@ -12,7 +12,11 @@ import ProblemData.Connection;
 public class AStar {
 	private static HashMap<String, Distance> calculated_distances = new HashMap<String, Distance>();
 	
-	public static AStarRoute hamiltonianPathAStar(ArrayList<Location> nodes, Location start) {
+	public static AStarRoute hamiltonianPathAStar(ArrayList<Location> nodes, Location start, String opt) {
+		int fuelPerKm = UserInterface.UserInterface.deliveryInfo.getTruck().getFuelPerKm();
+		int fuelAvailable = UserInterface.UserInterface.deliveryInfo.getTruck().getFuel();
+		int truckLoad = UserInterface.UserInterface.deliveryInfo.getTruck().getLoad();
+		
 		for (int i = 0; i < nodes.size(); i++) {
 			nodes.get(i).setAStarVars(0, 0, 0, null);
 		}
@@ -23,27 +27,41 @@ public class AStar {
 		AStarRoute startRoute = new AStarRoute(start);
 		open.add(startRoute);
 		
+		AStarRoute bestRoute = new AStarRoute(start);
+		
 		while (open.size() != 0) {
 			AStarRoute q = open.poll();
 			
+			//System.out.println(q.getDistance()*fuelPerKm + "  " + fuelAvailable);
+			if (q.getDistance()*fuelPerKm > fuelAvailable) {
+				System.out.println(q.getDistance()*fuelPerKm);
+				return bestRoute; 
+			}
+			
 			for (Location newNode : nodes) {
-				AStarRoute successor = new AStarRoute(q);
-				successor.addLocation(newNode);
-			 
-				if (newNode.equals(start) && successor.getRoute().size() == nodes.size()+1) {
-					return successor;
-				}
-				
-				if (q.contains(newNode)) {
+				if (q.contains(newNode) && !newNode.equals(start)) {
 					continue;
 				}
+				
+				AStarRoute successor = new AStarRoute(q);
+				successor.addLocation(newNode);
 				
 				double g = successor.getDistance();
 				double h = hamiltonianPathHeuristic(successor, nodes, start);
 				double f = g + h;
 				
-				successor.setHeuristic(f);
-				open.add(successor);
+				if (newNode.equals(start) && successor.getDistance()*fuelPerKm <= fuelAvailable) {
+					if (successor.getRoute().size() == nodes.size()+1) {
+						return successor;
+					}
+					else if (successor.getRoute().size() > bestRoute.getRoute().size()) {
+						bestRoute = successor;
+					}
+				}
+				else {
+					successor.setHeuristic(f);
+					open.add(successor);
+				}
 			}
 			
 			closed.add(q);
@@ -96,10 +114,14 @@ public class AStar {
 		return 0;
 	}
 	
-	
 	public static double shortestDistance(Location start, Location goal, ArrayList<Location> path) {
+		if (start.equals(goal)) {
+			return 0;
+		}
+		
 		String name1 = start.getID() + "_" + goal.getID();
 		String name2 = goal.getID() + "_" + start.getID();
+		
 		if (calculated_distances.containsKey(name1)) {
 			Distance d = calculated_distances.get(name1);
 			setPath(path, d, false);

@@ -31,8 +31,6 @@ public class UserInterface {
 			System.out.println("----Connections----");
 			System.out.print("Connection level: ");
 			int connectionLevel = reader.nextInt();
-			System.out.print("Max. fuel per km: ");
-			int maxFuel = reader.nextInt();
 			
 			System.out.println("----Truck----");
 			System.out.print("Fuel: ");
@@ -41,6 +39,8 @@ public class UserInterface {
 			int load = reader.nextInt();
 			System.out.print("Start node id: ");
 			int start = reader.nextInt();
+			System.out.print("Fuel per km: ");
+			int fuelPerKm = reader.nextInt();
 			
 			System.out.println("----Packages----");
 			System.out.print("Number of packages: ");
@@ -49,7 +49,7 @@ public class UserInterface {
 			int maxVolume = reader.nextInt();
 			System.out.print("Max. value: ");
 			int maxValue = reader.nextInt();
-			XMLParser.XMLParser.write(nLocations, maxX, maxY, connectionLevel, nFuel, maxFuel, fuel, load, start, nPackages, maxVolume, maxValue);
+			XMLParser.XMLParser.write(nLocations, maxX, maxY, connectionLevel, nFuel, fuelPerKm, fuel, load, start, nPackages, maxVolume, maxValue);
 			System.out.println("Finished generating scenario");
 		}
 		else if (decision == 2){

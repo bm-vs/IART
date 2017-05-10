@@ -5,7 +5,6 @@ public class Connection implements Comparable<Connection> {
 	private double b;
 	private Location location1;
 	private Location location2;
-	private double fuel;
 	
 	public Connection() {}
 	
@@ -19,11 +18,6 @@ public class Connection implements Comparable<Connection> {
 			this.m = (location2.getY()-location1.getY())/(double)(location2.getX()-location1.getX());
 		}
 		this.b = location1.getY()-m*location1.getX();
-	}
-	
-	public Connection(Location location1, Location location2, double fuel) {
-		this(location1, location2);
-		this.fuel = fuel;
 	}
 	
 	public boolean intersects(Connection f) {		
@@ -92,10 +86,6 @@ public class Connection implements Comparable<Connection> {
 		return location2;
 	}
 	
-	public double getFuel() {
-		return fuel;
-	}
-	
 	public String toString() {
 		return location1.toString() + "->" + location2.toString();
 	}
@@ -136,7 +126,7 @@ public class Connection implements Comparable<Connection> {
 		if (this.equals(c)) {
 			return 0;
 		}
-		else if (c.getFuel() > fuel) {
+		else if (c.getM() > m) {
 			return 1;
 		}
 		else {
