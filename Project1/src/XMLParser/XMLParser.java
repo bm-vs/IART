@@ -111,7 +111,7 @@ public class XMLParser {
 			org.w3c.dom.Element rootElement = doc.createElement("deliveryInfo");
 			doc.appendChild(rootElement);
 			Scanner reader = new Scanner(System.in);
-			Random random = new Random(22);
+			Random random = new Random();
 			
 			//---------------------------------------------------------------------------
 			// Locations and connections

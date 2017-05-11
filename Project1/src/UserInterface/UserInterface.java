@@ -61,13 +61,13 @@ public class UserInterface {
 			Algorithm alg = new Algorithm();
 			
 			System.out.println("Optimize: ");
-			System.out.println("1 - Distance");
+			System.out.println("1 - Delivery Count");
 			System.out.println("2 - Delivery Value");
-			System.out.println("3 - Better distance?");
+			System.out.println("3 - Better count?");
 			int opt = reader.nextInt();
 			
 			if (opt == 1) {
-				alg.run("distance");
+				alg.run("number");
 			}
 			else if (opt == 2) {
 				alg.run("value");

@@ -36,10 +36,7 @@ public class AStar {
 			AStarRoute q = open.poll();
 			routeExplored++;
 			
-			if (q.getFuel() > fuelAvailable || q.getLoad() > truckLoad) {
-				System.out.println(q + "," + q.getFuel() + "," + q.getLoad());
-				
-				
+			if (q.getFuel() > fuelAvailable || q.getLoad() > truckLoad) {				
 				System.out.println("Fuel used: " + fuelUsed);
 				System.out.println("Load used: " + loadUsed);
 				System.out.println("Routes explored: " + routeExplored);
@@ -59,7 +56,7 @@ public class AStar {
 				
 				double g=0, h=0;
 				
-				if (opt.equals("distance")) {
+				if (opt.equals("number")) {
 					g = successor.getDistance();
 					h = hamiltonianPathHeuristic(successor, nodes, start);
 				}
@@ -68,8 +65,8 @@ public class AStar {
 					h = hamiltonianPathHeuristic(successor, nodes, start)/(nodes.size()-successor.getRoute().size());
 				}
 				else if (opt.equals("value")) {
-					g = 0;
-					h = 0;
+					g = successor.getDistance()/successor.getRoute().size()/successor.getValue();
+					h = (hamiltonianPathHeuristic(successor, nodes, start)/(nodes.size()-successor.getRoute().size()));
 				}
 				
 				double f = g + h;

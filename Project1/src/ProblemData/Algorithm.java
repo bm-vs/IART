@@ -42,6 +42,7 @@ public class Algorithm {
 		
 		importantNodes.add(startLocation);
 		importantNodes = new ArrayList<Location>(new LinkedHashSet<Location>(importantNodes));
+		
 		AStarRoute aStarRoute = AStar.hamiltonianPathAStar(importantNodes, startLocation, opt);
 		System.out.println(aStarRoute);
 		System.out.println(aStarRoute.getDistance());

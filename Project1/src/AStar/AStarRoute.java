@@ -95,4 +95,18 @@ public class AStarRoute implements Comparable<AStarRoute> {
 		return n_packages;
 	}
 	
+	public double getValue() {
+		double value = 0;
+		
+		ArrayList<Package> packages = UserInterface.UserInterface.deliveryInfo.getDeliveries();
+		
+		for (Package p : packages) {
+			if (route.contains(p.getLocation())) {
+				value += p.getValue();
+			}
+		}
+		
+		return value;
+	}
+	
 }
