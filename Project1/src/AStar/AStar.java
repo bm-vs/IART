@@ -28,14 +28,19 @@ public class AStar {
 		open.add(startRoute);
 		
 		AStarRoute bestRoute = new AStarRoute(start);
+		double fuelUsed = 0;
+		double loadUsed = 0;
+		int routeExplored = 0;
 		
 		while (open.size() != 0) {
 			AStarRoute q = open.poll();
+			routeExplored++;
 			
-			//System.out.println(q.getDistance()*fuelPerKm + "  " + fuelAvailable);
-			if (q.getDistance()*fuelPerKm > fuelAvailable) {
-				System.out.println(q.getDistance()*fuelPerKm);
-				return bestRoute; 
+			if (q.getFuel() > fuelAvailable || q.getLoad() > truckLoad) {
+				System.out.println("Fuel used: " + fuelUsed);
+				System.out.println("Load used: " + loadUsed);
+				System.out.println("Routes explored: " + routeExplored);
+				return bestRoute;
 			}
 			
 			for (Location newNode : nodes) {
@@ -46,16 +51,24 @@ public class AStar {
 				AStarRoute successor = new AStarRoute(q);
 				successor.addLocation(newNode);
 				
+				successor.setFuel(successor.getDistance()*fuelPerKm);
+				successor.setLoad();
+				
 				double g = successor.getDistance();
 				double h = hamiltonianPathHeuristic(successor, nodes, start);
 				double f = g + h;
 				
-				if (newNode.equals(start) && successor.getDistance()*fuelPerKm <= fuelAvailable) {
+				if (newNode.equals(start) && successor.getFuel() <= fuelAvailable && successor.getLoad() <= truckLoad) {
 					if (successor.getRoute().size() == nodes.size()+1) {
+						System.out.println("Fuel used: " + successor.getFuel());
+						System.out.println("Load used: " + successor.getLoad());
+						System.out.println("Routes explored: " + routeExplored);
 						return successor;
 					}
 					else if (successor.getRoute().size() > bestRoute.getRoute().size()) {
 						bestRoute = successor;
+						fuelUsed = successor.getFuel();
+						loadUsed = successor.getLoad();
 					}
 				}
 				else {

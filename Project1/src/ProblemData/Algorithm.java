@@ -31,7 +31,7 @@ public class Algorithm {
 		System.out.println(fullRoute);
 		System.out.println(route.getDistance());
 		UserInterface.UserInterface.gui.addPath(fullRoute, startLocation, packages, "genetic");
-
+		
 		System.out.println("============================");
 		System.out.println("A*");
 		

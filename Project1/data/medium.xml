@@ -370,13 +370,13 @@
 <package location="70" value="94" volume="39"/>
 <package location="3" value="69" volume="9"/>
 <package location="76" value="63" volume="46"/>
-<package location="70" value="80" volume="42"/>
 <package location="21" value="4" volume="1"/>
-<package location="72" value="23" volume="34"/>
 <package location="5" value="70" volume="36"/>
 <package location="72" value="73" volume="27"/>
 <package location="34" value="12" volume="5"/>
 <package location="22" value="12" volume="5"/>
 <package location="60" value="12" volume="5"/>
+<package location="30" value="12" volume="5"/>
+<package location="80" value="12" volume="5"/>
 </packages>
 </deliveryInfo>

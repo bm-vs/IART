@@ -2,23 +2,28 @@ package AStar;
 
 import java.util.ArrayList;
 import ProblemData.Location;
+import ProblemData.Package;
 
 
 public class AStarRoute implements Comparable<AStarRoute> {
 	private ArrayList<Location> route;
-	private double cost;
+	private double fuel;
+	private double load;
 	private double heuristic;
+	private int n_packages;
 	
 	public AStarRoute(AStarRoute r) {
 		this.route = new ArrayList<Location>(r.getRoute());
-		cost = 0;
+		fuel = 0;
+		load = 0;
 		heuristic = 0;
 	}
 	
 	public AStarRoute(Location l) {
 		route = new ArrayList<Location>();
 		route.add(l);
-		cost = 0;
+		fuel = 0;
+		load = 0;
 		heuristic = 0;
 	}
 	
@@ -61,11 +66,33 @@ public class AStarRoute implements Comparable<AStarRoute> {
 		heuristic = f;
 	}
 	
-	public double getCost() {
-		return cost;
+	public double getFuel() {
+		return fuel;
 	}
 	
-	public void setCost(double c) {
-		cost = c;
+	public void setFuel(double c) {
+		fuel = c;
 	}
+	
+	public double getLoad() {
+		return load;
+	}
+	
+	public void setLoad() {
+		load = 0;
+		n_packages = 0;
+		ArrayList<Package> packages = UserInterface.UserInterface.deliveryInfo.getDeliveries();
+		
+		for (Package p : packages) {
+			if (route.contains(p.getLocation())) {
+				load += p.getVolume();
+				n_packages++;
+			}
+		}
+	}
+	
+	public int getNPackages() {
+		return n_packages;
+	}
+	
 }
