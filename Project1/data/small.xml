@@ -84,7 +84,7 @@
 <connection location1="0" location2="7"/>
 </locations>
 <connections/>
-<truck load="200" startlocation="1" fuelPerKm="1"/>
+<truck fuel="50" load="200" startlocation="1" fuelPerKm="1"/>
 <packages>
 <package location="10" value="15" volume="19"/>
 <package location="15" value="46" volume="98"/>

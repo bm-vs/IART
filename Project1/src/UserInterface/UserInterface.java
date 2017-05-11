@@ -55,12 +55,26 @@ public class UserInterface {
 		else if (decision == 2){
 			System.out.print("Document name: ");
 			String file = reader.nextLine(); file = reader.nextLine();
-			
 			deliveryInfo = new DeliveryInfo();
 			XMLParser.XMLParser.read(file, deliveryInfo);
-			gui = new GraphDisplay();				
+			gui = new GraphDisplay();
 			Algorithm alg = new Algorithm();
-			alg.run("max_deliveries");
+			
+			System.out.println("Optimize: ");
+			System.out.println("1 - Distance");
+			System.out.println("2 - Delivery Value");
+			System.out.println("3 - Better distance?");
+			int opt = reader.nextInt();
+			
+			if (opt == 1) {
+				alg.run("distance");
+			}
+			else if (opt == 2) {
+				alg.run("value");
+			}
+			else if (opt == 3) {
+				alg.run("enhanced");
+			}
 		}
 		else if (decision != 3) {
 			reader.close();

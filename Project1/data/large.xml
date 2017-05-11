@@ -1526,25 +1526,25 @@
 <connections/>
 <truck fuel="1000" load="300" startlocation="1" fuelPerKm="1"/>
 <packages>
-<package location="124" value="42" volume="32"/>
-<package location="29" value="11" volume="21"/>
-<package location="304" value="31" volume="10"/>
-<package location="359" value="84" volume="16"/>
-<package location="217" value="10" volume="4"/>
-<package location="363" value="77" volume="38"/>
-<package location="11" value="1" volume="40"/>
-<package location="248" value="84" volume="8"/>
-<package location="21" value="86" volume="25"/>
-<package location="203" value="30" volume="30"/>
-<package location="128" value="2" volume="25"/>
+<package location="223" value="26" volume="45"/>
 <package location="236" value="94" volume="41"/>
-<package location="16" value="37" volume="13"/>
-<package location="266" value="99" volume="12"/>
-<package location="396" value="37" volume="34"/>
-<package location="19" value="64" volume="1"/>
+<package location="11" value="1" volume="40"/>
+<package location="363" value="77" volume="38"/>
 <package location="325" value="40" volume="38"/>
 <package location="280" value="45" volume="38"/>
+<package location="396" value="37" volume="34"/>
+<package location="124" value="42" volume="32"/>
+<package location="203" value="30" volume="30"/>
+<package location="128" value="2" volume="25"/>
+<package location="21" value="86" volume="25"/>
+<package location="29" value="11" volume="21"/>
+<package location="359" value="84" volume="16"/>
 <package location="199" value="64" volume="14"/>
-<package location="223" value="26" volume="45"/>
+<package location="16" value="37" volume="13"/>
+<package location="266" value="99" volume="12"/>
+<package location="304" value="31" volume="10"/>
+<package location="248" value="84" volume="8"/>
+<package location="217" value="10" volume="4"/>
+<package location="19" value="64" volume="1"/>
 </packages>
 </deliveryInfo>
