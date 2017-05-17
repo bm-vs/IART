@@ -63,18 +63,15 @@ public class UserInterface {
 			System.out.println("Optimize: ");
 			System.out.println("1 - Delivery Count");
 			System.out.println("2 - Delivery Value");
-			System.out.println("3 - Better count?");
 			int opt = reader.nextInt();
 			
 			if (opt == 1) {
-				alg.run("number");
+				alg.run("delivery_count");
 			}
 			else if (opt == 2) {
-				alg.run("value");
+				alg.run("delivery_value");
 			}
-			else if (opt == 3) {
-				alg.run("enhanced");
-			}
+			
 		}
 		else if (decision != 3) {
 			reader.close();

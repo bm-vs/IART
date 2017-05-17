@@ -4,7 +4,7 @@ import java.util.LinkedHashSet;
 
 import AStar.AStar;
 import AStar.AStarRoute;
-import GeneticAlgorithm.Route;
+//import GeneticAlgorithm.Route;
 
 public class Algorithm {	
 	public Algorithm() {
@@ -21,7 +21,7 @@ public class Algorithm {
 		Location startLocation = UserInterface.UserInterface.deliveryInfo.getTruck().getLocation();
 		nodes.add(startLocation);
 		nodes = new ArrayList<Location>(new LinkedHashSet<Location>(nodes));
-		
+		/*
 		Route route = GeneticAlgorithm.GeneticAlgorithm.run(nodes, startLocation, 10000, 50);
 		System.out.println();
 		System.out.println("============================");
@@ -31,6 +31,7 @@ public class Algorithm {
 		System.out.println(fullRoute);
 		System.out.println(route.getDistance());
 		UserInterface.UserInterface.gui.addPath(fullRoute, startLocation, packages, "genetic");
+		*/
 		
 		System.out.println("============================");
 		System.out.println("A*");
@@ -42,6 +43,11 @@ public class Algorithm {
 		
 		importantNodes.add(startLocation);
 		importantNodes = new ArrayList<Location>(new LinkedHashSet<Location>(importantNodes));
+		
+		UserInterface.UserInterface.gui.setNodeStart(startLocation);
+		for (Location node : importantNodes) {
+			UserInterface.UserInterface.gui.setNodeDelivery(node);
+		}
 		
 		AStarRoute aStarRoute = AStar.hamiltonianPathAStar(importantNodes, startLocation, opt);
 		System.out.println(aStarRoute);
