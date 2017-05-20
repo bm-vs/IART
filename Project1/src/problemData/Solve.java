@@ -23,7 +23,7 @@ public class Solve {
 		
 		
 		long tstart = System.currentTimeMillis();
-		//aStar(startLocation, packages, opt);
+		aStar(startLocation, packages, opt);
 		System.out.println("Time elapsed: " + (System.currentTimeMillis()-tstart)/1000.0);
 		
 		System.out.println();

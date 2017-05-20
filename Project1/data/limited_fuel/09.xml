@@ -273,14 +273,16 @@
 <connection location1="71" location2="59"/>
 <connection location1="8" location2="37"/>
 </connections>
-<truck fuel="1000" fuelPerKm="1" load="1000" startlocation="1"/>
+<truck fuel="45" fuelPerKm="1" load="1000" startlocation="2"/>
 <packages>
 <package location="42" value="85" volume="4"/>
-<package location="25" value="57" volume="6"/>
+<package location="47" value="57" volume="6"/>
 <package location="66" value="26" volume="8"/>
 <package location="72" value="50" volume="2"/>
 <package location="29" value="49" volume="1"/>
-<package location="88" value="21" volume="8"/>
+<package location="21" value="21" volume="8"/>
 <package location="16" value="86" volume="6"/>
+<package location="60" value="15" volume="5"/>
+<package location="22" value="40" volume="9"/>
 </packages>
 </deliveryInfo>

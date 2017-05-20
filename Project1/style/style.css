@@ -39,6 +39,13 @@ node .astar {
 	text-size: 12;
 }
 
+node .dijkstra {
+	fill-color: cyan;
+	text-color: white;
+	text-visibility-mode: normal;
+	text-size: 12;
+}
+
 edge {
 	fill-color: white;
 }
@@ -49,5 +56,9 @@ edge .bfs {
 
 edge .astar {
 	fill-color: green;
+}
+
+edge .dijkstra {
+	fill-color: cyan;
 }
 

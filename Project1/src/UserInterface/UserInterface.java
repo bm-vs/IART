@@ -14,6 +14,7 @@ public class UserInterface {
 		System.out.println("1 - Create file");
 		System.out.println("2 - Read file");
 		System.out.println("3 - Exit");
+		System.out.println("4 - Test All");
 		decision = reader.nextInt();
 		
 		if (decision == 1) {
@@ -71,10 +72,21 @@ public class UserInterface {
 			}
 			
 		}
+		else if (decision == 4) {
+			for (int i = 3; i <= 9; i++) {
+				System.out.println("-------------------------------------------------------------------------------------------");
+				System.out.println(i);
+				deliveryInfo = new DeliveryInfo();
+				xmlParser.XMLParser.read("limited_load/0" + i, deliveryInfo);
+				Solve alg = new Solve();
+				alg.run("delivery_value");
+			}
+		}
 		else if (decision != 3) {
 			reader.close();
 			return;
 		}
+		
 		
 		reader.close();
 	}

@@ -48,7 +48,7 @@ public class BreadthFirst {
 									aStarDisplay.addPath(bestRoute.getRoute(), start, packages, "bfs");
 								}
 							}
-							else if (opt.equals("delivery_value") || opt.equals("full_delivery")) {
+							else if (opt.equals("delivery_value")) {
 								if (successor.getValue() > bestRoute.getValue() || (successor.getValue() == bestRoute.getValue() && successor.getDistance() < bestRoute.getDistance())) {
 									bestRoute = successor;
 									aStarDisplay.addPath(bestRoute.getRoute(), start, packages, "bfs");
