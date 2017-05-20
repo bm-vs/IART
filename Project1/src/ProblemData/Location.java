@@ -1,4 +1,4 @@
-package ProblemData;
+package problemData;
 import java.util.ArrayList;
 
 public class Location implements Comparable<Location> {

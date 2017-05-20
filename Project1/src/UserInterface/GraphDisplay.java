@@ -1,13 +1,13 @@
-package UserInterface;
+package userInterface;
 import java.util.ArrayList;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 
-import ProblemData.Connection;
-import ProblemData.DeliveryInfo;
-import ProblemData.Location;
+import problemData.Connection;
+import problemData.DeliveryInfo;
+import problemData.Location;
 
 public class GraphDisplay {
 	private Graph graph;
@@ -21,7 +21,7 @@ public class GraphDisplay {
 		graph.addAttribute("ui.antialias");
 		graph.addAttribute("ui.quality");
 		/*==================================*/
-		graph.addAttribute("ui.stylesheet", "url('file:///../style/style2.css')");
+		graph.addAttribute("ui.stylesheet", "url('file:///../style/style.css')");
 		
 		// Create nodes
 		for (Integer key: info.getLocations().keySet()) {
@@ -79,33 +79,35 @@ public class GraphDisplay {
 	}
 	
 	// type - "astar"/"genetic"
-	public void addPath(ArrayList<Location> route, Location startLocation, ArrayList<ProblemData.Package> packages, String type) {
+	public void addPath(ArrayList<Location> route, Location startLocation, ArrayList<problemData.Package> packages, String type) {
+		resetNodeColors();
+		resetEdgeColors();
+		
 		for (int i = 0; i < route.size()-1; i++) {
 			ArrayList<Location> path = new ArrayList<Location>();
-			AStar.AStar.shortestDistance(route.get(i), route.get(i+1), path);
+			algorithms.AStar.shortestDistance(route.get(i), route.get(i+1), path);
 			
 			for (int j = 0; j < path.size()-1; j++) {
-				if (path.get(j).equals(startLocation)) {
-					setNodeStart(path.get(j));
-				}
-				else {
-					setNodeVisited(path.get(j), type);
-					
-					for (int k = 0; k < packages.size(); k++) {
-						if (packages.get(k).getLocation().equals(path.get(j))) {
-							setNodeDelivery(path.get(j));
-						}
-					}
-				}
-				
+				setNodeVisited(path.get(j), type);
 				setEdgeVisited(path.get(j), path.get(j+1), type);
 			}
+		}
+		
+		setNodeStart(startLocation);
+		for (problemData.Package p : packages) {
+			setNodeDelivery(p.getLocation());
 		}
 	}
 	
 	public void resetNodeColors() {
 		for (org.graphstream.graph.Node n : graph.getNodeSet()) {
 			n.addAttribute("ui.class", "");
+		}
+	}
+	
+	public void resetEdgeColors() {
+		for (Edge e : graph.getEdgeSet()) {
+			e.addAttribute("ui.class", "");
 		}
 	}
 	

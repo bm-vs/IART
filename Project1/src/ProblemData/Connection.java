@@ -1,4 +1,4 @@
-package ProblemData;
+package problemData;
 
 public class Connection implements Comparable<Connection> {
 	private double m;

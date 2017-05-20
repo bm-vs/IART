@@ -1,21 +1,20 @@
-package UserInterface;
+package userInterface;
 import java.util.Scanner;
 
-import ProblemData.Algorithm;
-import ProblemData.DeliveryInfo;
+import problemData.DeliveryInfo;
+import problemData.Solve;
 
 public class UserInterface {
 	public static DeliveryInfo deliveryInfo;
-	public static GraphDisplay gui;
 	
-	public UserInterface() {
+	public static void main(String[] args) {
 		Scanner reader = new Scanner(System.in);
 		int decision;
 		
 		System.out.println("1 - Create file");
 		System.out.println("2 - Read file");
 		System.out.println("3 - Exit");
-		decision /*= 2;*/= reader.nextInt();
+		decision = reader.nextInt();
 		
 		if (decision == 1) {
 			System.out.println("----Locations----");
@@ -49,16 +48,15 @@ public class UserInterface {
 			int maxVolume = reader.nextInt();
 			System.out.print("Max. value: ");
 			int maxValue = reader.nextInt();
-			XMLParser.XMLParser.write(nLocations, maxX, maxY, connectionLevel, nFuel, fuelPerKm, fuel, load, start, nPackages, maxVolume, maxValue);
+			xmlParser.XMLParser.write(nLocations, maxX, maxY, connectionLevel, nFuel, fuelPerKm, fuel, load, start, nPackages, maxVolume, maxValue);
 			System.out.println("Finished generating scenario");
 		}
 		else if (decision == 2){
 			System.out.print("Document name: ");
 			String file = reader.nextLine(); file = reader.nextLine();
 			deliveryInfo = new DeliveryInfo();
-			XMLParser.XMLParser.read(file, deliveryInfo);
-			gui = new GraphDisplay();
-			Algorithm alg = new Algorithm();
+			xmlParser.XMLParser.read(file, deliveryInfo);
+			Solve alg = new Solve();
 			
 			System.out.println("Optimize: ");
 			System.out.println("1 - Delivery Count");

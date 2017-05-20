@@ -1,4 +1,4 @@
-package XMLParser;
+package xmlParser;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
@@ -17,11 +17,11 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import ProblemData.Connection;
-import ProblemData.DeliveryInfo;
-import ProblemData.Location;
-import ProblemData.Package;
-import UserInterface.GraphDisplay;
+import problemData.Connection;
+import problemData.DeliveryInfo;
+import problemData.Location;
+import problemData.Package;
+import userInterface.GraphDisplay;
 
 public class XMLParser {
 	public static void read(String docName, DeliveryInfo info) {

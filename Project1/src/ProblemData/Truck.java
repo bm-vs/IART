@@ -1,4 +1,4 @@
-package ProblemData;
+package problemData;
 public class Truck {
 
 	private int fuel;

@@ -1,4 +1,4 @@
-package ProblemData;
+package problemData;
 public class Package {
 
 	private Location location;
