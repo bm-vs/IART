@@ -1,8 +1,8 @@
-package AStar;
+package algorithms;
 
 import java.util.ArrayList;
 
-import ProblemData.Location;
+import problemData.Location;
 
 public class Distance {
 	private Location start;

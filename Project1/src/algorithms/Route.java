@@ -1,25 +1,26 @@
-package AStar;
+package algorithms;
 
 import java.util.ArrayList;
-import ProblemData.Location;
-import ProblemData.Package;
+
+import problemData.Location;
+import problemData.Package;
 
 
-public class AStarRoute implements Comparable<AStarRoute> {
+public class Route implements Comparable<Route> {
 	private ArrayList<Location> route;
 	private double fuel;
 	private double load;
 	private double heuristic;
 	private int n_packages;
 	
-	public AStarRoute(AStarRoute r) {
+	public Route(Route r) {
 		this.route = new ArrayList<Location>(r.getRoute());
 		fuel = 0;
 		load = 0;
 		heuristic = 0;
 	}
 	
-	public AStarRoute(Location l) {
+	public Route(Location l) {
 		route = new ArrayList<Location>();
 		route.add(l);
 		fuel = 0;
@@ -50,7 +51,7 @@ public class AStarRoute implements Comparable<AStarRoute> {
 		return route.toString();
 	}
 	
-	public int compareTo(AStarRoute r) {
+	public int compareTo(Route r) {
 		return Double.compare(heuristic, r.getHeuristic());
 	}
 	
@@ -81,7 +82,7 @@ public class AStarRoute implements Comparable<AStarRoute> {
 	public void setLoad() {
 		load = 0;
 		n_packages = 0;
-		ArrayList<Package> packages = UserInterface.UserInterface.deliveryInfo.getDeliveries();
+		ArrayList<Package> packages = userInterface.UserInterface.deliveryInfo.getDeliveries();
 		
 		for (Package p : packages) {
 			if (route.contains(p.getLocation())) {
@@ -98,7 +99,7 @@ public class AStarRoute implements Comparable<AStarRoute> {
 	public double getValue() {
 		double value = 0;
 		
-		ArrayList<Package> packages = UserInterface.UserInterface.deliveryInfo.getDeliveries();
+		ArrayList<Package> packages = userInterface.UserInterface.deliveryInfo.getDeliveries();
 		
 		for (Package p : packages) {
 			if (route.contains(p.getLocation())) {

@@ -1,4 +1,4 @@
-package AStar;
+package algorithms;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,39 +6,44 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 
-import ProblemData.Location;
-import ProblemData.Connection;
+import problemData.Connection;
+import problemData.Location;
+import problemData.Package;
+import userInterface.GraphDisplay;
 
 public class AStar {
 	private static HashMap<String, Distance> calculated_distances = new HashMap<String, Distance>();
 	
-	public static AStarRoute hamiltonianPathAStar(ArrayList<Location> nodes, Location start, String opt) {
-		int fuelPerKm = UserInterface.UserInterface.deliveryInfo.getTruck().getFuelPerKm();
-		int fuelAvailable = UserInterface.UserInterface.deliveryInfo.getTruck().getFuel();
-		int truckLoad = UserInterface.UserInterface.deliveryInfo.getTruck().getLoad();
+	public static Route hamiltonianPathAStar(ArrayList<Location> nodes, Location start, String opt, GraphDisplay aStarDisplay) {
+		int fuelPerKm = userInterface.UserInterface.deliveryInfo.getTruck().getFuelPerKm();
+		int fuelAvailable = userInterface.UserInterface.deliveryInfo.getTruck().getFuel();
+		int truckLoad = userInterface.UserInterface.deliveryInfo.getTruck().getLoad();
+		int totalValue = 0;
+		int totalLoad = 0;
+		ArrayList<Package> packages = userInterface.UserInterface.deliveryInfo.getDeliveries();
+		for (Package p : packages) {
+			totalValue += p.getValue();
+			totalLoad += p.getVolume();
+		}
 		
 		for (int i = 0; i < nodes.size(); i++) {
 			nodes.get(i).setAStarVars(0, 0, 0, null);
 		}
 		
-		PriorityQueue<AStarRoute> open = new PriorityQueue<AStarRoute>();
-		ArrayList<AStarRoute> closed = new ArrayList<AStarRoute>();
+		PriorityQueue<Route> open = new PriorityQueue<Route>();
+		ArrayList<Route> closed = new ArrayList<Route>();
 		
-		AStarRoute startRoute = new AStarRoute(start);
+		Route startRoute = new Route(start);
 		open.add(startRoute);
 		
-		AStarRoute bestRoute = new AStarRoute(start);
-		double fuelUsed = 0;
-		double loadUsed = 0;
+		Route bestRoute = new Route(start);
 		int routeExplored = 0;
 		
 		while (open.size() != 0) {
-			AStarRoute q = open.poll();
+			Route q = open.poll();
 			routeExplored++;
 			
-			if (q.getFuel() > fuelAvailable || q.getLoad() > truckLoad) {				
-				System.out.println("Fuel used: " + fuelUsed);
-				System.out.println("Load used: " + loadUsed);
+			if (q.getFuel() > fuelAvailable || q.getLoad() > truckLoad) {
 				System.out.println("Routes explored: " + routeExplored);
 				return bestRoute;
 			}
@@ -48,53 +53,39 @@ public class AStar {
 					continue;
 				}
 				
-				AStarRoute successor = new AStarRoute(q);
+				Route successor = new Route(q);
 				successor.addLocation(newNode);
-				
 				successor.setFuel(successor.getDistance()*fuelPerKm);
 				successor.setLoad();
 				
 				double g=0, h=0;
 				
-				/*
-				if (opt.equals("number")) {
-					g = successor.getDistance();
-					h = hamiltonianPathHeuristic(successor, nodes, start);
+				if (opt.equals("delivery_count") || opt.equals("full_delivery")) {
+					g = successor.getDistance()*fuelPerKm/fuelAvailable + successor.getLoad()/truckLoad;
 				}
-				else if (opt.equals("enhanced")) {
-					g = successor.getDistance()/successor.getRoute().size();
-					h = hamiltonianPathHeuristic(successor, nodes, start)/(nodes.size()-successor.getRoute().size());
+				else if (opt.equals("delivery_value")) {
+					g = successor.getDistance()*fuelPerKm/fuelAvailable + successor.getLoad()/truckLoad + (1-successor.getValue()/totalValue);
 				}
-				else if (opt.equals("value")) {
-					g = successor.getDistance()/successor.getRoute().size()/successor.getValue();
-					h = (hamiltonianPathHeuristic(successor, nodes, start)/(nodes.size()-successor.getRoute().size()));
-				}
-				*/
 				
-				g = successor.getDistance()*fuelPerKm/fuelAvailable + successor.getLoad()/truckLoad;
-				h = hamiltonianPathHeuristic(successor, nodes, start)/fuelAvailable;
+				h = hamiltonianPathHeuristic(successor, nodes, start)/fuelAvailable + (totalLoad-successor.getLoad())/truckLoad;
 				
 				double f = g + h;
 				
 				if (newNode.equals(start) && successor.getFuel() <= fuelAvailable && successor.getLoad() <= truckLoad) {
 					if (successor.getRoute().size() == nodes.size()+1) {
-						System.out.println("Fuel used: " + successor.getFuel());
-						System.out.println("Load used: " + successor.getLoad());
 						System.out.println("Routes explored: " + routeExplored);
 						return successor;
 					}
 					else if (opt.equals("delivery_count")) {
 						if (successor.getRoute().size() > bestRoute.getRoute().size() || (successor.getRoute().size() == bestRoute.getRoute().size() && successor.getDistance() < bestRoute.getDistance())) {
 							bestRoute = successor;
-							fuelUsed = successor.getFuel();
-							loadUsed = successor.getLoad();
+							aStarDisplay.addPath(bestRoute.getRoute(), start, packages, "astar");
 						}
 					}
-					else if (opt.equals("delivery_value")) {
+					else if (opt.equals("delivery_value") || opt.equals("full_delivery")) {
 						if (successor.getValue() > bestRoute.getValue() || (successor.getValue() == bestRoute.getValue() && successor.getDistance() < bestRoute.getDistance())) {
 							bestRoute = successor;
-							fuelUsed = successor.getFuel();
-							loadUsed = successor.getLoad();
+							aStarDisplay.addPath(bestRoute.getRoute(), start, packages, "astar");
 						}
 					}
 				}
@@ -110,7 +101,7 @@ public class AStar {
 		return null;
 	}	
 	
-	public static double hamiltonianPathHeuristic(AStarRoute route, ArrayList<Location> everyNode, Location start) {		
+	public static double hamiltonianPathHeuristic(Route route, ArrayList<Location> everyNode, Location start) {		
 		ArrayList<Location> remainingNodes = new ArrayList<Location>();
 		
 		for (Location n : everyNode) {
@@ -174,7 +165,7 @@ public class AStar {
 			return d.getWeight();
 		}
 		
-		UserInterface.UserInterface.deliveryInfo.resetAStarVars();
+		userInterface.UserInterface.deliveryInfo.resetAStarVars();
 		ArrayList<Location> closed = new ArrayList<Location>();
 		PriorityQueue<Location> open = new PriorityQueue<Location>();
 		
@@ -287,6 +278,10 @@ public class AStar {
 		}
 		
 		return total;
+	}
+	
+	public static void resetCalculatedDistances() {
+		calculated_distances = new HashMap<String, Distance>();
 	}
 	
 }
