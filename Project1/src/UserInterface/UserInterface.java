@@ -64,23 +64,29 @@ public class UserInterface {
 			System.out.println("2 - Delivery Value");
 			int opt = reader.nextInt();
 			
+			System.out.println("Refuel?");
+			System.out.println("1 - Yes");
+			System.out.println("2 - No");
+			int opt_fuel = reader.nextInt();
+			boolean fuel;
+			if (opt_fuel == 1) {
+				fuel = true;
+			}
+			else {
+				fuel = false;
+			}
+			
+			
 			if (opt == 1) {
-				alg.run("delivery_count");
+				alg.run("delivery_count", fuel);
 			}
 			else if (opt == 2) {
-				alg.run("delivery_value");
+				alg.run("delivery_value", fuel);
 			}
 			
 		}
 		else if (decision == 4) {
-			for (int i = 3; i <= 9; i++) {
-				System.out.println("-------------------------------------------------------------------------------------------");
-				System.out.println(i);
-				deliveryInfo = new DeliveryInfo();
-				xmlParser.XMLParser.read("limited_load/0" + i, deliveryInfo);
-				Solve alg = new Solve();
-				alg.run("delivery_value");
-			}
+			lel("limited_fuel", false);
 		}
 		else if (decision != 3) {
 			reader.close();
@@ -89,5 +95,22 @@ public class UserInterface {
 		
 		
 		reader.close();
+	}
+	
+	
+	public static void lel(String s, boolean b) {
+		for (int i = 3; i <= 10; i++) {
+			System.out.println("-------------------------------------------------------------------------------------------");
+			System.out.println(i);
+			deliveryInfo = new DeliveryInfo();
+			if (i == 10) {
+				xmlParser.XMLParser.read(s + "/" + i, deliveryInfo);
+			}
+			else {
+				xmlParser.XMLParser.read(s + "/0" + i, deliveryInfo);
+			}
+			Solve alg = new Solve();
+			alg.run("delivery_count", b);
+		}
 	}
 }

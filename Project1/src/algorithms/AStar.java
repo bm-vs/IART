@@ -14,19 +14,11 @@ import userInterface.GraphDisplay;
 public class AStar {
 	private static HashMap<String, Distance> calculated_distances = new HashMap<String, Distance>();
 	
-	public static Route hamiltonianPathAStar(ArrayList<Location> nodes, Location start, String opt, GraphDisplay aStarDisplay) {
+	public static Route run(ArrayList<Location> nodes, ArrayList<Location> fuelNodes, Location start, String opt, GraphDisplay aStarDisplay, boolean fuel) {
 		int fuelPerKm = userInterface.UserInterface.deliveryInfo.getTruck().getFuelPerKm();
 		int fuelAvailable = userInterface.UserInterface.deliveryInfo.getTruck().getFuel();
 		int truckLoad = userInterface.UserInterface.deliveryInfo.getTruck().getLoad();
 		ArrayList<Package> packages = userInterface.UserInterface.deliveryInfo.getDeliveries();
-		/*
-		int totalValue = 0;
-		int totalLoad = 0;
-		for (Package p : packages) {
-			totalValue += p.getValue();
-			totalLoad += p.getVolume();
-		}
-		*/
 		
 		for (int i = 0; i < nodes.size(); i++) {
 			nodes.get(i).setAStarVars(0, 0, 0, null);
@@ -46,8 +38,14 @@ public class AStar {
 			routeExplored++;
 			
 			if (q.getFuel() > fuelAvailable || q.getLoad() > truckLoad) {
-				System.out.println("Routes explored: " + routeExplored);
-				return bestRoute;
+				if (fuel)  {
+					closed.add(q);
+					continue;
+				}
+				else {
+					System.out.println("Routes explored: " + routeExplored);
+					return bestRoute;
+				}
 			}
 			
 			for (Location newNode : nodes) {
@@ -56,27 +54,25 @@ public class AStar {
 				}
 				
 				Route successor = new Route(q);
-				successor.addLocation(newNode);
-				successor.setFuel(successor.getDistance()*fuelPerKm);
-				successor.setLoad();
+				successor.addLocation(newNode, fuelPerKm, fuel);
 				
 				double g=0, h=0;
 				
 				ArrayList<Location> p = new ArrayList<Location>();
 				g = successor.getDistance()*fuelPerKm/fuelAvailable + successor.getLoad()/truckLoad;
-				h = shortestDistance(newNode, start, p)/fuelAvailable;
+				h = shortestDistance(newNode, start, p)*fuelPerKm/fuelAvailable;
 				
 				double f = g + h;
 				
 				if (newNode.equals(start)) {
 					if (successor.getFuel() <= fuelAvailable && successor.getLoad() <= truckLoad) {
-						if (successor.getRoute().size() == nodes.size()+1) {
+						if (successor.getNPackages() == packages.size()) {
 							System.out.println("Routes explored: " + routeExplored);
 							return successor;
 						}
 						
 						if (opt.equals("delivery_count")) {
-							if (successor.getRoute().size() > bestRoute.getRoute().size() || (successor.getRoute().size() == bestRoute.getRoute().size() && successor.getDistance() < bestRoute.getDistance())) {
+							if (successor.getNPackages() > bestRoute.getNPackages() || (successor.getNPackages() == bestRoute.getNPackages() && successor.getDistance() < bestRoute.getDistance())) {
 								bestRoute = successor;
 								aStarDisplay.addPath(bestRoute.getRoute(), start, packages, "astar");
 							}
@@ -92,6 +88,24 @@ public class AStar {
 				else {
 					successor.setHeuristic(f);
 					open.add(successor);
+				}
+			}
+			
+			if (fuel) {
+				for (Location newNode : fuelNodes) {
+					if (!newNode.equals(q.getLastNode())) {
+						Route successor = new Route(q);
+						successor.addLocation(newNode, fuelPerKm, fuel);
+						
+						ArrayList<Location> p = new ArrayList<Location>();
+						double g = successor.getDistance()*fuelPerKm/fuelAvailable + successor.getLoad()/truckLoad;
+						double h = shortestDistance(newNode, start, p)*fuelPerKm/fuelAvailable;
+						
+						double f = g + h;
+						
+						successor.setHeuristic(f);
+						open.add(successor);
+					}
 				}
 			}
 			
@@ -283,6 +297,15 @@ public class AStar {
 	
 	public static void resetCalculatedDistances() {
 		calculated_distances = new HashMap<String, Distance>();
+	}
+	
+	public static void preCalculateDistances(ArrayList<Location> nodes) {
+		for (Location l1 : nodes) {
+			for (Location l2 : nodes) {
+				ArrayList<Location> p = new ArrayList<Location>();
+				shortestDistance(l1, l2, p);
+			}
+		}
 	}
 	
 }

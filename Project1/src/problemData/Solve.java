@@ -10,7 +10,7 @@ import userInterface.GraphDisplay;
 public class Solve {	
 	public Solve() {}
 	
-	public void run(String opt) {
+	public void run(String opt, boolean fuel) {
 		ArrayList<Location> nodes = new ArrayList<Location>();
 		ArrayList<Package> packages = userInterface.UserInterface.deliveryInfo.getDeliveries();
 		for (int i = 0; i < packages.size(); i++) {
@@ -21,20 +21,14 @@ public class Solve {
 		nodes.add(startLocation);
 		nodes = new ArrayList<Location>(new LinkedHashSet<Location>(nodes));
 		
-		
-		long tstart = System.currentTimeMillis();
-		aStar(startLocation, packages, opt);
-		System.out.println("Time elapsed: " + (System.currentTimeMillis()-tstart)/1000.0);
-		
+		AStar.resetCalculatedDistances();
+		aStar(startLocation, packages, opt, fuel);		
 		System.out.println();
 		AStar.resetCalculatedDistances();
-		
-		tstart = System.currentTimeMillis();
-		bfs(startLocation, packages, opt);
-		System.out.println("Time elapsed: " + (System.currentTimeMillis()-tstart)/1000.0);
+		bfs(startLocation, packages, opt, fuel);
 	}
 	
-	private void aStar(Location startLocation, ArrayList<Package> packages, String opt) {
+	private void aStar(Location startLocation, ArrayList<Package> packages, String opt, boolean fuel) {
 		GraphDisplay aStarDisplay = new GraphDisplay();
 		aStarDisplay.display();
 		
@@ -54,15 +48,25 @@ public class Solve {
 		}
 		aStarDisplay.setNodeStart(startLocation);
 		
+		ArrayList<Location> fuelNodes = new ArrayList<Location>();
+		for (Location l : userInterface.UserInterface.deliveryInfo.getLocations().values()) {
+			if (l.getFuel()) {
+				fuelNodes.add(l);
+			}
+		}
+		
+		//AStar.preCalculateDistances(importantNodes);
 		Route aStarRoute;
-		aStarRoute = AStar.hamiltonianPathAStar(importantNodes, startLocation, opt, aStarDisplay);
+		long tstart = System.currentTimeMillis();
+		aStarRoute = AStar.run(importantNodes, fuelNodes, startLocation, opt, aStarDisplay, fuel);
+		System.out.println("Time elapsed: " + (System.currentTimeMillis()-tstart)/1000.0);
 		
 		System.out.println("Best Route: " + aStarRoute);
-		System.out.println("Fuel used: " + aStarRoute.getFuel());
+		System.out.println("Distance: " + aStarRoute.getDistance());
 		System.out.println("Load used: " + aStarRoute.getLoad());
 		
 		if (opt.equals("delivery_count")) {
-			System.out.println("Number packages: " + (aStarRoute.getRoute().size()-2));
+			System.out.println("Number packages: " + aStarRoute.getNPackages());
 		}
 		else if (opt.equals("delivery_value")) {
 			System.out.println("Value delivered: " + aStarRoute.getValue());
@@ -71,7 +75,7 @@ public class Solve {
 		aStarDisplay.addPath(aStarRoute.getRoute(), startLocation, packages, "astar");
 	}
 	
-	private void bfs(Location startLocation, ArrayList<Package> packages, String opt) {
+	private void bfs(Location startLocation, ArrayList<Package> packages, String opt, boolean fuel) {
 		GraphDisplay bfsDisplay = new GraphDisplay();
 		bfsDisplay.display();
 		
@@ -91,15 +95,25 @@ public class Solve {
 		}
 		bfsDisplay.setNodeStart(startLocation);
 		
+		ArrayList<Location> fuelNodes = new ArrayList<Location>();
+		for (Location l : userInterface.UserInterface.deliveryInfo.getLocations().values()) {
+			if (l.getFuel()) {
+				fuelNodes.add(l);
+			}
+		}
+		
+		//AStar.preCalculateDistances(importantNodes);
 		Route bfsRoute;
-		bfsRoute = BreadthFirst.run(importantNodes, startLocation, opt, bfsDisplay);
+		long tstart = System.currentTimeMillis();
+		bfsRoute = BreadthFirst.run(importantNodes, fuelNodes, startLocation, opt, bfsDisplay, fuel);
+		System.out.println("Time elapsed: " + (System.currentTimeMillis()-tstart)/1000.0);
 		
 		System.out.println("Best Route: " + bfsRoute);
-		System.out.println("Fuel used: " + bfsRoute.getFuel());
+		System.out.println("Distance: " + bfsRoute.getDistance());
 		System.out.println("Load used: " + bfsRoute.getLoad());
 		
 		if (opt.equals("delivery_count")) {
-			System.out.println("Number packages: " + (bfsRoute.getRoute().size()-2));
+			System.out.println("Number packages: " + bfsRoute.getNPackages());
 		}
 		else if (opt.equals("delivery_value")) {
 			System.out.println("Value delivered: " + bfsRoute.getValue());

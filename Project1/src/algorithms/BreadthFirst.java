@@ -7,7 +7,7 @@ import problemData.Package;
 import userInterface.GraphDisplay;
 
 public class BreadthFirst {
-	public static Route run(ArrayList<Location> nodes, Location start, String opt, GraphDisplay aStarDisplay) {
+	public static Route run(ArrayList<Location> nodes, ArrayList<Location> fuelNodes, Location start, String opt, GraphDisplay aStarDisplay, boolean fuel) {
 		int fuelPerKm = userInterface.UserInterface.deliveryInfo.getTruck().getFuelPerKm();
 		int fuelAvailable = userInterface.UserInterface.deliveryInfo.getTruck().getFuel();
 		int truckLoad = userInterface.UserInterface.deliveryInfo.getTruck().getLoad();
@@ -36,14 +36,12 @@ public class BreadthFirst {
 					}
 					
 					Route successor = new Route(q);
-					successor.addLocation(newNode);
-					successor.setFuel(successor.getDistance()*fuelPerKm);
-					successor.setLoad();
+					successor.addLocation(newNode, fuelPerKm, fuel);
 				
 					if (newNode.equals(start)) {
 						if (successor.getFuel() <= fuelAvailable && successor.getLoad() <= truckLoad) {
 							if (opt.equals("delivery_count")) {
-								if (successor.getRoute().size() > bestRoute.getRoute().size() || (successor.getRoute().size() == bestRoute.getRoute().size() && successor.getDistance() < bestRoute.getDistance())) {
+								if (successor.getNPackages() > bestRoute.getNPackages() || (successor.getNPackages() == bestRoute.getNPackages() && successor.getDistance() < bestRoute.getDistance())) {
 									bestRoute = successor;
 									aStarDisplay.addPath(bestRoute.getRoute(), start, packages, "bfs");
 								}
@@ -58,6 +56,16 @@ public class BreadthFirst {
 					}
 					else {
 						nextLevel.add(successor);
+					}
+				}
+				
+				if (fuel) {
+					for (Location newNode : fuelNodes) {
+						if (!newNode.equals(q.getLastNode())) {
+							Route successor = new Route(q);
+							successor.addLocation(newNode, fuelPerKm, fuel);
+							nextLevel.add(successor);
+						}
 					}
 				}
 			}
