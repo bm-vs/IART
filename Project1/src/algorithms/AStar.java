@@ -18,13 +18,15 @@ public class AStar {
 		int fuelPerKm = userInterface.UserInterface.deliveryInfo.getTruck().getFuelPerKm();
 		int fuelAvailable = userInterface.UserInterface.deliveryInfo.getTruck().getFuel();
 		int truckLoad = userInterface.UserInterface.deliveryInfo.getTruck().getLoad();
+		ArrayList<Package> packages = userInterface.UserInterface.deliveryInfo.getDeliveries();
+		/*
 		int totalValue = 0;
 		int totalLoad = 0;
-		ArrayList<Package> packages = userInterface.UserInterface.deliveryInfo.getDeliveries();
 		for (Package p : packages) {
 			totalValue += p.getValue();
 			totalLoad += p.getVolume();
 		}
+		*/
 		
 		for (int i = 0; i < nodes.size(); i++) {
 			nodes.get(i).setAStarVars(0, 0, 0, null);
@@ -60,15 +62,9 @@ public class AStar {
 				
 				double g=0, h=0;
 				
-				if (opt.equals("delivery_count") || opt.equals("full_delivery")) {
-					g = successor.getDistance()*fuelPerKm/fuelAvailable + successor.getLoad()/truckLoad;
-				}
-				else if (opt.equals("delivery_value")) {
-					g = successor.getDistance()*fuelPerKm/fuelAvailable + successor.getLoad()/truckLoad + (1-successor.getValue()/totalValue);
-				}
-				
 				ArrayList<Location> p = new ArrayList<Location>();
-				h = shortestDistance(newNode, start, p)/fuelAvailable; // + (totalLoad-successor.getLoad())/truckLoad;
+				g = successor.getDistance()*fuelPerKm/fuelAvailable + successor.getLoad()/truckLoad;
+				h = shortestDistance(newNode, start, p)/fuelAvailable;
 				
 				double f = g + h;
 				
@@ -82,13 +78,13 @@ public class AStar {
 						if (opt.equals("delivery_count")) {
 							if (successor.getRoute().size() > bestRoute.getRoute().size() || (successor.getRoute().size() == bestRoute.getRoute().size() && successor.getDistance() < bestRoute.getDistance())) {
 								bestRoute = successor;
-								aStarDisplay.addPath(bestRoute.getRoute(), start, packages, "bfs");
+								aStarDisplay.addPath(bestRoute.getRoute(), start, packages, "astar");
 							}
 						}
-						else if (opt.equals("delivery_value") || opt.equals("full_delivery")) {
+						else if (opt.equals("delivery_value")) {
 							if (successor.getValue() > bestRoute.getValue() || (successor.getValue() == bestRoute.getValue() && successor.getDistance() < bestRoute.getDistance())) {
 								bestRoute = successor;
-								aStarDisplay.addPath(bestRoute.getRoute(), start, packages, "bfs");
+								aStarDisplay.addPath(bestRoute.getRoute(), start, packages, "astar");
 							}
 						}
 					}

@@ -55,15 +55,7 @@ public class Solve {
 		aStarDisplay.setNodeStart(startLocation);
 		
 		Route aStarRoute;
-		if (opt.equals("delivery_count")) {
-			aStarRoute = AStar.hamiltonianPathAStar(importantNodes, startLocation, opt, aStarDisplay);
-		}
-		else {
-			aStarRoute = AStar.hamiltonianPathAStar(importantNodes, startLocation, "full_delivery", aStarDisplay);
-			if (aStarRoute.getRoute().size() != importantNodes.size()+1) {
-				aStarRoute = AStar.hamiltonianPathAStar(importantNodes, startLocation, opt, aStarDisplay);
-			}
-		}
+		aStarRoute = AStar.hamiltonianPathAStar(importantNodes, startLocation, opt, aStarDisplay);
 		
 		System.out.println("Best Route: " + aStarRoute);
 		System.out.println("Fuel used: " + aStarRoute.getFuel());
