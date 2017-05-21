@@ -14,7 +14,6 @@ public class UserInterface {
 		System.out.println("1 - Create file");
 		System.out.println("2 - Read file");
 		System.out.println("3 - Exit");
-		System.out.println("4 - Test All");
 		decision = reader.nextInt();
 		
 		if (decision == 1) {
@@ -76,7 +75,6 @@ public class UserInterface {
 				fuel = false;
 			}
 			
-			
 			if (opt == 1) {
 				alg.run("delivery_count", fuel);
 			}
@@ -85,9 +83,6 @@ public class UserInterface {
 			}
 			
 		}
-		else if (decision == 4) {
-			lel("limited_fuel", false);
-		}
 		else if (decision != 3) {
 			reader.close();
 			return;
@@ -95,22 +90,5 @@ public class UserInterface {
 		
 		
 		reader.close();
-	}
-	
-	
-	public static void lel(String s, boolean b) {
-		for (int i = 3; i <= 10; i++) {
-			System.out.println("-------------------------------------------------------------------------------------------");
-			System.out.println(i);
-			deliveryInfo = new DeliveryInfo();
-			if (i == 10) {
-				xmlParser.XMLParser.read(s + "/" + i, deliveryInfo);
-			}
-			else {
-				xmlParser.XMLParser.read(s + "/0" + i, deliveryInfo);
-			}
-			Solve alg = new Solve();
-			alg.run("delivery_count", b);
-		}
 	}
 }

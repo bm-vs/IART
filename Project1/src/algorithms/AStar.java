@@ -160,7 +160,7 @@ public class AStar {
 		return 0;
 	}
 	
-	public static double shortestDistance(Location start, Location goal, ArrayList<Location> path) {
+	public static double shortestDistance(Location start, Location goal, ArrayList<Location> path) {		
 		if (start.equals(goal)) {
 			return 0;
 		}

@@ -55,7 +55,6 @@ public class Solve {
 			}
 		}
 		
-		//AStar.preCalculateDistances(importantNodes);
 		Route aStarRoute;
 		long tstart = System.currentTimeMillis();
 		aStarRoute = AStar.run(importantNodes, fuelNodes, startLocation, opt, aStarDisplay, fuel);
@@ -102,7 +101,6 @@ public class Solve {
 			}
 		}
 		
-		//AStar.preCalculateDistances(importantNodes);
 		Route bfsRoute;
 		long tstart = System.currentTimeMillis();
 		bfsRoute = BreadthFirst.run(importantNodes, fuelNodes, startLocation, opt, bfsDisplay, fuel);

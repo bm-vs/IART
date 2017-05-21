@@ -86,7 +86,6 @@ public class GraphDisplay {
 		for (int i = 0; i < route.size()-1; i++) {
 			ArrayList<Location> path = new ArrayList<Location>();
 			algorithms.AStar.shortestDistance(route.get(i), route.get(i+1), path);
-			
 			for (int j = 0; j < path.size()-1; j++) {
 				setNodeVisited(path.get(j), type);
 				setEdgeVisited(path.get(j), path.get(j+1), type);

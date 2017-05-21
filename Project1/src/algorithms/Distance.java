@@ -13,7 +13,7 @@ public class Distance {
 	public Distance(Location start, Location end, ArrayList<Location> path, double weight) {
 		this.start = start;
 		this.end = end;
-		this.path = path;
+		this.path = new ArrayList<Location>(path);
 		this.weight = weight;
 	}
 	
@@ -31,5 +31,9 @@ public class Distance {
 	
 	public double getWeight() {
 		return weight;
+	}
+	
+	public String toString() {
+		return path.toString();
 	}
 }
