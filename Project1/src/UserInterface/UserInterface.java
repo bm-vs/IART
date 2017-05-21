@@ -1,8 +1,8 @@
 package userInterface;
 import java.util.Scanner;
 
+import algorithms.Solve;
 import problemData.DeliveryInfo;
-import problemData.Solve;
 
 public class UserInterface {
 	public static DeliveryInfo deliveryInfo;

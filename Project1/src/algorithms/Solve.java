@@ -1,10 +1,9 @@
-package problemData;
+package algorithms;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
-import algorithms.AStar;
-import algorithms.BreadthFirst;
-import algorithms.Route;
+import problemData.Location;
+import problemData.Package;
 import userInterface.GraphDisplay;
 
 public class Solve {	
