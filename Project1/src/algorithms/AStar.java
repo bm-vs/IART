@@ -38,14 +38,8 @@ public class AStar {
 			routeExplored++;
 			
 			if (q.getFuel() > fuelAvailable || q.getLoad() > truckLoad) {
-				if (fuel)  {
-					closed.add(q);
-					continue;
-				}
-				else {
-					System.out.println("Routes explored: " + routeExplored);
-					return bestRoute;
-				}
+				System.out.println("Routes explored: " + routeExplored);
+				return bestRoute;
 			}
 			
 			for (Location newNode : nodes) {
@@ -59,7 +53,7 @@ public class AStar {
 				double g=0, h=0;
 				
 				ArrayList<Location> p = new ArrayList<Location>();
-				g = successor.getDistance()*fuelPerKm/fuelAvailable + successor.getLoad()/truckLoad;
+				g = Double.max(successor.getDistance()*fuelPerKm/fuelAvailable, successor.getLoad()/truckLoad);
 				h = shortestDistance(newNode, start, p)*fuelPerKm/fuelAvailable;
 				
 				double f = g + h;
