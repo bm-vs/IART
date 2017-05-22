@@ -1,0 +1,64 @@
+graph {
+	fill-color: black;
+}
+
+node {
+	fill-color: white;
+	size: 10px;
+	stroke-mode: plain;
+	stroke-color: black;
+	stroke-width: 1px;
+	text-visibility-mode: hidden;
+}
+
+node.start {
+	fill-color: red;
+	text-color: white;
+	text-visibility-mode: normal;
+	text-size: 12;
+}
+
+node.delivery {
+	fill-color: orange;
+	text-color: white;
+	text-visibility-mode: normal;
+	text-size: 12;
+}
+
+node .bfs {
+	fill-color: yellow;
+	text-color: white;
+	text-visibility-mode: normal;
+	text-size: 12;
+}
+
+node .astar {
+	fill-color: green;
+	text-color: white;
+	text-visibility-mode: normal;
+	text-size: 12;
+}
+
+node .dijkstra {
+	fill-color: cyan;
+	text-color: white;
+	text-visibility-mode: normal;
+	text-size: 12;
+}
+
+edge {
+	fill-color: white;
+}
+
+edge .bfs {
+	fill-color: yellow;
+}
+
+edge .astar {
+	fill-color: green;
+}
+
+edge .dijkstra {
+	fill-color: cyan;
+}
+

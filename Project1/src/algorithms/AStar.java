@@ -110,50 +110,6 @@ public class AStar {
 		return bestRoute;
 	}	
 	
-	public static double hamiltonianPathHeuristic(Route route, ArrayList<Location> everyNode, Location start) {		
-		ArrayList<Location> remainingNodes = new ArrayList<Location>();
-		
-		for (Location n : everyNode) {
-			if (!route.contains(n)) {
-				remainingNodes.add(n);
-			}
-		}
-		remainingNodes.add(start);
-		
-		return minimumSpanningTree(remainingNodes);
-	}
-	
-	private static double minimumSpanningTree(ArrayList<Location> nodes) {
-		if (nodes.size() == 0) {
-			return 0;
-		}
-		
-		ArrayList<Location> tree = new ArrayList<Location>();
-		tree.add(nodes.get(0));
-		
-		while (tree.size() != nodes.size()) {
-			Location add = null;
-			double min = Integer.MAX_VALUE;
-			
-			for (Location l1 : tree) {
-				for (Location l2 : nodes) {
-					if (!tree.contains(l2)) {
-						ArrayList<Location> p = new ArrayList<Location>();
-						double d = shortestDistance(l1, l2, p);
-						if (d < min) {
-							add = l2;
-							min = d;
-						}
-					}
-				}
-			}
-			
-			tree.add(add);
-		}
-		
-		return 0;
-	}
-	
 	public static double shortestDistance(Location start, Location goal, ArrayList<Location> path) {		
 		if (start.equals(goal)) {
 			return 0;
@@ -291,15 +247,5 @@ public class AStar {
 	
 	public static void resetCalculatedDistances() {
 		calculated_distances = new HashMap<String, Distance>();
-	}
-	
-	public static void preCalculateDistances(ArrayList<Location> nodes) {
-		for (Location l1 : nodes) {
-			for (Location l2 : nodes) {
-				ArrayList<Location> p = new ArrayList<Location>();
-				shortestDistance(l1, l2, p);
-			}
-		}
-	}
-	
+	}	
 }
